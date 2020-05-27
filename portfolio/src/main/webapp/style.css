@@ -1,9 +1,52 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+
+body {
+    font-family: "Courier New", Courier, monospace
+}
+
+header {
+    height: 140px;
+    /* padding-top: 5px; */
+    /*padding-left: 5px;
+    padding-right: 5px;*/
+    text-align: left;
+    background: rgb(57, 110, 255);
+    color: white;
+    font-size: 30px;
+    font-family: "Arial Black", Gadget, sans-serif
+}
+
+nav {
+    background: rgb(141, 203, 255);
+    color: white;
+    height: 40px;
+}
+
+nav a {
+    text-align: center;
+    display: block;
+    float: left;
+    font-size: 18px;
+}
+
+#about {
+    width: 300px;
+    border: solid red 2px;
 }
 
 #greeting-container {
   margin-top: 20px;
+}
+
+.left {
+    text-align: start;
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
+}
+
+.right {
+    text-align: end;
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
 }
