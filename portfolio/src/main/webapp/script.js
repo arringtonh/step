@@ -26,3 +26,5 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+// TODO: create a function that returns the date in MM/DD/YYY format
