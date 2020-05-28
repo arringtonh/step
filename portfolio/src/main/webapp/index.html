@@ -24,15 +24,14 @@
     
 
     <!-- TODO: add
-        contacting arrington
+        contacting arrington (done)
         arrington's interests (done)
         arrington's details/skills (done)
         arrington's schools (done)
         arrington's companies (done)
-        arrington's blurbs
-        arrington's friend space
+        arrington's blurbs (done)
         favorite song
-        projects + relevant coursework
+        projects + relevant coursework (done)
         my header or whatever it's called (done)
          -->
     <div class="row">
@@ -40,8 +39,8 @@
     <div class="left column">
         <section id="about">
             <h2>arrington</h2>
-            <!-- TODO: insert image -->
-            <p>"welcome to my portfolio :-)"</p>
+            <p><img src="images/images.jpeg" alt="snoopy looking lovely">
+            "welcome to my portfolio :-)"</p>
             <p>she/her</p>
             <p>18 years old</p>
             <p>Birmingham, ALABAMA United States</p>
@@ -49,15 +48,27 @@
         </section>
 
         <section id="contact">
-            <h2>contacting arrington</h2>
-            <p>This is my contact information.</p>
-            <p>At some point, more will be added here.</p>
+            <h3>contacting arrington</h3>
+            <table>
+                <tr>
+                    <td>arrington@brown.edu</td>
+                    <td><a href="http://linkedin.com/in/arrington-harper">linkedin</a></td>
+                </tr>
+                <tr>
+                    <td>add to friends</td>
+                    <td>add favorite</td>
+                </tr>
+                <tr>
+                    <td>instant message</td>
+                    <td>block user</td>
+                </tr>
+            </table>
         </section>
 
         <!-- TODO: add a song, if i have time -->
 
         <section id="interests">
-            <h2>arrington's interests</h2>
+            <h3>arrington's interests</h3>
             <table>
               <tr>
                 <th>general</th>
@@ -79,7 +90,7 @@
         </section>
 
         <section id="skills">
-            <h2>arrington's details</h2>
+            <h3>arrington's details</h3>
             <table>
               <tr>
                 <th>member since</th>
@@ -105,50 +116,95 @@
         </section>
 
         <section id="schools">
-            <h2>schools</h2>
-            <p>brown university</p>
-            <p>2019 - present</p>
-            <p>providence, RI</p>
+            <h3>schools</h3>
+            <div class="block">
+            <h4>brown university</h4>
+            <p><i>2019 - present</i></p>
+            <p><i>providence, RI</i></p>
             <p>gpa: 4.0</p>
             <p>degree: undergraduate</p>
             <p>major: computer science</p>
+            </div>
 
-            <p>alabama school of fine arts</p>
-            <p>2015 - 2019</p>
-            <p>birmingham, AL</p>
+            <div class="block">
+            <h4>alabama school of fine arts</h4>
+            <p><i>2015 - 2019</i></p>
+            <p><i>birmingham, AL</i></p>
             <p>gpa: 4.4</p>
             <p>program: math and science</p>
+            </div>
         </section>
 
         <section id="schools">
-            <h2>companies</h2>
-
-            <p>google</p>
-            <p>summer 2020</p>
-            <p>san francisco, CA</p>
-            <p>google STEP intern</p>
-
-            <p>brown university</p>
-            <p>spring 2020</p>
-            <p>providence, RI</p>
-            <p>teaching assistant for CSCI111, an intro CS class</p>
+            <h3>companies</h3>
+            <div class="block">
+                <h4>google</h4>
+                <p><i>summer 2020</i></p>
+                <p><i>san francisco, CA</i></p>
+                <p>google STEP intern</p>
+            </div>
+            <div class="block">
+                <h4>brown university</h4>
+                <p><i>spring 2020</i></p>
+                <p><i>providence, RI</i></p>
+                <p>teaching assistant for CSCI111, an intro CS class</p>
+            </div>
         </section>
     </div>
 
     <div class="right column">
         <section id="blurb">
-            <h2>arrington's blurbs</h2>
-            <h3>about me:</h3>
-            <p>my about here.</p>
+            <h3>arrington's blurbs</h3>
+            <h4>about me:</h4>
+            <p>
+            hiii, i'm arrington and i’m from birmingham, AL! i just finished 
+            my first year at brown university. i’m interested in learning
+            more about systems engineering and natural language processing. 
+            i’m currently learning japanese and i’ll be trying out korean next semester. 
+            i'm thinking about a linguistics double major but we'll see!! :)
+            </p>
 
-            <h3>who i'd like to meet:</h3>
-            <p>uma thurman</p>
+            <h4>who i'd like to meet:</h4>
+            <p>noam chomsky</p>
         </section>
 
         <section id="projects">
-            <h2>Projects.</h2>
-            <p>These are my projects.</p>
-            <p>At some point, more will be added here.</p>
+            <h3>arrington's projects and coursework</h3>
+            <h4>my projects</h4>
+            <table>
+                <tr>
+                    <th>search</th>
+                    <td>
+                        implemented the pagerank algorithm to build a local 
+                        search engine (indexer + querier) with scala.
+                    </td>
+                </tr>
+                <tr>
+                    <th>game</th>
+                    <td>
+                        implemented a minimax algorithm to build an AI for a connect 4
+                        game with reasonML in VS code.
+                    </td>
+                </tr>
+                <tr>
+                    <th>rackette</th>
+                    <td>
+                        built a parser and interpreter for the programming langauge
+                        racket in reasonML with VS code.
+                    </td>
+                </tr>
+            </table>
+            <h4>my relevant coursework</h4>
+            <table>
+                <tr>
+                    <th>spring + summer 2020</th>
+                    <td>discrete math and probability, statistical inference, japanese 200</td>
+                </tr>
+                <tr>
+                    <th>fall 2020</th>
+                    <td>calculus II, linear algebra, japanese 100</td>
+                </tr>
+            </table>
         </section>
     </div>
     </div>
