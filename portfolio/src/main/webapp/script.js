@@ -27,4 +27,14 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
+function age() {
+    const birthday = new Date(2001, 6, 1); // my birthday
+    const now = new Date();
+
+    const diff = now.getFullYear() - birthday.getFullYear();
+    // this only works because my birthday is on the 1st of the month
+    const age = (now.getMonth() >= birthday.getMonth()) ? diff : diff - 1
+    document.getElementById("age").innerText = `${age} years old`;
+}
+
 // TODO: create a function that returns the date in MM/DD/YYY format

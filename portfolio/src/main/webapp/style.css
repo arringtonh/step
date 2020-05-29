@@ -1,69 +1,346 @@
-
 body {
     font-family: "Courier New", Courier, monospace;
     margin: 0px;
 }
 
 header {
-    height: 140px;
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+    width: 100%;
     padding: 0px;
     text-align: left;
-    background: rgb(57, 110, 255);
+    background: rgb(36, 134, 255);
     color: white;
     font-size: 30px;
-    font-family: "Arial Black", Gadget, sans-serif
 }
+
+h1 {
+    margin: 5px;
+    margin-left: 20px;
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 60px;
+    width: 100%;
+}
+
+h2 {
+  /* width: 97.5%; */
+  padding: 0.25em;
+  display: block;
+}
+
+h3 {
+  /* width: 97.5%; */
+  padding: 0.25em;
+  display: block;
+}
+
+p {
+  font-size: 16px;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
 
 nav {
-    background: rgb(141, 203, 255);
     color: white;
-    height: 48px;
-}
-
-header h1 {
-    margin: 5px;
+    height: auto;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    float: left;
 }
 
 nav a {
     text-align: center;
     text-decoration: none;
+    font-weight: bold;
     display: block;
     float: left;
-    padding: 8px;
+    padding: 11px;
     font-size: 18px;
 }
 
 nav a:hover {
     background-color: rgb(73, 146, 255);
+    text-decoration: bold;
 }
 
-#about {
-    width: 300px;
-    border: solid red 2px;
+nav a:link {
+  color: white;
 }
 
-#greeting-container {
-  margin-top: 20px;
+nav a:visited {
+  color: white;
 }
 
-.row {
-    display: flex;
+section {
+  margin: 20px;
 }
+
+img {
+    float: left;
+    margin: auto 20px;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
 
 .column {
     float: left;
-}
-
-.left {
+    /* border: solid white 10px; */
+    /* border-width: 20px 10px 20px; */
+    max-width: 100%;
     text-align: start;
     margin-left: auto;
     margin-right: auto;
-    width: 25%;
+}
+
+
+@media screen and (max-width: 600px) {
+
+    header {
+        justify-content: center;
+    }
+
+    nav {
+        justify-content: center;
+    }
+
+    .column {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 600px) {
+
+    header {
+        justify-content: flex-start;
+    }
+
+    nav {
+        justify-content: flex-start;
+    }
+
+    .row {
+        display: flex;
+        margin: auto;
+    }
+
+    .left {
+      width: 40%;
+    }
+
+    .right {
+      width: 60%;
+    }
+}
+
+/* when the screen is smaller than 1000px, the columns will go resize */
+@media screen and (min-width: 1200px) {
+
+    header {
+    justify-content: flex-start;
+    }
+
+    nav {
+        justify-content: flex-start;
+    }
+
+.row {
+    display: flex;
+    margin: auto 10%;
+}
+
+.left {
+    width: 30%;
+    min-width: 400px;
 }
 
 .right {
-    text-align: end;
-    margin-left: auto;
-    margin-right: auto;
-    width: 75%;
+    width: 70%;
+}
+}
+
+/* used for the name above snoopy. */
+
+.column h2 {
+  padding: 0.25em;
+  display: block;
+  margin: 0;
+  margin-top: 20px;
+}
+
+/* used for the section headings */
+.column h3 {
+  padding: 0.25em;
+  display: block;
+  margin: 0;
+}
+
+.left h3 {
+  color: white;
+  background-color: rgb(73, 146, 255);
+}
+
+.right h3 {
+  color: orangered;
+  background-color: rgb(255, 203, 158);
+}
+
+/* the left and right tables */
+
+.column table {
+  width: 100%;
+  margin: 0;
+}
+
+.right table {
+  width: 100%;
+  margin: 0;
+}
+
+.column tr {
+    padding: 0.25em;
+    height: 50%;
+}
+
+.column th {
+    text-decoration: bold;
+    text-align: left;
+    vertical-align: top;
+    background-color: rgb(138, 190, 255);
+    color: white;
+    width: 30%;
+    padding: 0.25em;
+}
+
+
+.column td {
+    width: 70%;
+    margin: 0 0 0 110px;
+    padding: 0.25em;
+}
+
+.left td {
+    background-color: rgb(181, 214, 255);
+}
+
+#contact td {
+    text-align: center;
+    background-color: white;
+    width: 50%;
+    height: 40px;
+}
+
+.right td {
+    vertical-align: top;
+    background-color: rgb(181, 214, 255);
+    height: 75px;
+}
+
+
+
+/* used for "about me:" "who i'd like to meet:", etc */
+.right h4 {
+    color: orangered;
+    margin: 10px;
+}
+
+
+#contact {
+  border: solid rgb(73, 146, 255) 2px;
+}
+
+
+#contact a {
+  color: black;
+}
+
+#contact a:visited {
+  color: black;
+}
+
+#interests {
+  border: solid rgb(73, 146, 255) 2px;
+}
+
+#skills {
+  border: solid rgb(73, 146, 255) 2px;
+}
+
+#schools {
+  border: solid rgb(73, 146, 255) 2px;
+}
+
+#schools h3 {
+  border: 0px;
+}
+
+#blurbs p {
+  padding: 0 10px;
+}
+
+#companies {
+  border: solid rgb(73, 146, 255) 2px;
+}
+
+#companies h3 {
+  border: 0px;
+}
+
+#comments th {
+  background-color: rgb(255, 134, 35);
+  color: rgb(0, 87, 218);
+  text-align: center;
+  width: 210px;
+  padding: 10px;
+}
+
+#comments img {
+  width: 100%;
+  max-width: 200px;
+  padding: 5px;
+  margin: 20px auto;
+}
+
+.num {
+  text-decoration: underline;
+  font-weight: bold;
+  color: orangered;
+}
+
+.center {
+  display: block;
+  margin: auto;
+}
+
+#comments td {
+  vertical-align: top;
+  padding: 10px;
+  background-color: rgb(255, 203, 158);
+  width: auto;
+}
+
+.block {
+  background-color: rgb(181, 214, 255);
+  padding: 0.25em;
+  border: solid white 2px;
+}
+
+.block h4 {
+  margin: 0;
+  margin-top: 3px;
+}
+
+.block p {
+  margin: 0.25em;
 }
