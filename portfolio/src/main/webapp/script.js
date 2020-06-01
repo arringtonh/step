@@ -57,3 +57,15 @@ function addTexttoDOM(text) {
     const textContainer = document.getElementById("text");
     textContainer.innerText = text;
 }
+
+function getMessages() {
+    fetch("/data").then(response => response.text()).then(text => {
+        const td = document.getElementById("text");
+        const parsedText = JSON.parse(text); // text is a string and not an array
+        td.innerText = "";
+        var i;
+        for (i = 0; i < parsedText.length; i++) {
+            td.appendChild(document.createTextNode(parsedText[i] + "\n"));
+        }
+    });
+}
