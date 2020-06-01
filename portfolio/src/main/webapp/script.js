@@ -28,7 +28,7 @@ function addRandomGreeting() {
 }
 
 function age() {
-    const birthday = new Date(2001, 6, 1); // my birthday
+    const birthday = new Date(2001, 5, 1); // my birthday june 1 2001
     const now = new Date();
 
     const diff = now.getFullYear() - birthday.getFullYear();
