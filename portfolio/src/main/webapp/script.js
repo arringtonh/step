@@ -38,3 +38,22 @@ function age() {
 }
 
 // TODO: create a function that returns the date in MM/DD/YYY format
+
+function getText() {
+    age() // you can only have one function in the onload attribute
+    console.log("Fetching text.");
+    const responsePromise = fetch("/data");
+    responsePromise.then(handleResponse);
+}
+
+function handleResponse(response) {
+    console.log("Handling the response.");
+    const textPromise = response.text();
+    textPromise.then(addTexttoDOM);
+}
+
+function addTexttoDOM(text) {
+    console.log("Adding text to DOM: "+text);
+    const textContainer = document.getElementById("text");
+    textContainer.innerText = text;
+}
