@@ -39,7 +39,7 @@ function age() {
 
 // TODO: create a function that returns the date in MM/DD/YYY format
 
-function getText() {
+function getMessages() {
     age() // you can only have one function in the onload attribute
     console.log("Fetching text.");
     const responsePromise = fetch("/data");
@@ -54,18 +54,11 @@ function handleResponse(response) {
 
 function addTextToDom(text) {
     console.log("Adding text to DOM: "+text);
-    const textContainer = document.getElementById("text");
-    textContainer.innerText = text;
-}
-
-function getMessages() {
-    fetch("/data").then(response => response.text()).then(text => {
-        const td = document.getElementById("text");
-        const parsedText = JSON.parse(text); // text is a string and not an array
-        td.innerText = "";
-        var i;
-        for (i = 0; i < parsedText.length; i++) {
-            td.appendChild(document.createTextNode(parsedText[i] + "\n"));
-        }
-    });
+    const td = document.getElementById("text");
+    const parsedText = JSON.parse(text); // text is a string and not an array
+    td.innerText = "";
+    var i;
+    for (i = 0; i < parsedText.length; i++) {
+        td.appendChild(document.createTextNode(parsedText[i] + "\n"));
+    }
 }
