@@ -49,10 +49,10 @@ function getText() {
 function handleResponse(response) {
     console.log("Handling the response.");
     const textPromise = response.text();
-    textPromise.then(addTexttoDOM);
+    textPromise.then(addTextToDom);
 }
 
-function addTexttoDOM(text) {
+function addTextToDom(text) {
     console.log("Adding text to DOM: "+text);
     const textContainer = document.getElementById("text");
     textContainer.innerText = text;
