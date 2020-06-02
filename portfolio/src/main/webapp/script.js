@@ -54,11 +54,27 @@ function handleResponse(response) {
 
 function addTextToDom(text) {
     console.log("Adding text to DOM: "+text);
-    const td = document.getElementById("text");
+    const table = document.getElementById("comment-section");
     const parsedText = JSON.parse(text); // text is a string and not an array
-    td.innerText = "";
-    var i;
+
+    var i; 
     for (i = 0; i < parsedText.length; i++) {
-        td.appendChild(document.createTextNode(parsedText[i] + "\n"));
+        const comment = parsedText[i];
+        const row = makeComment(comment.name, comment.content);
+        table.appendChild(row);
     }
+}
+
+function makeComment(name, comment) {
+    const row = document.createElement("tr")
+    const heading = document.createElement("th");
+    const data = document.createElement("td");
+
+    heading.innerText = name;
+    data.innerText = comment;
+
+    row.appendChild(heading);
+    row.appendChild(data)
+
+    return row;
 }
