@@ -35,10 +35,17 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      addMessages();
+      //addMessages();
       String json = convertToJsonUsingGson();
       response.setContentType("application/json;");
       response.getWriter().println(json);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      String comment = request.getParameter("comment");
+      messages.add(comment);
+      response.sendRedirect("/index.html");
   }
 
   private String convertToJsonUsingGson() {
