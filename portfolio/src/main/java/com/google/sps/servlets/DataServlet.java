@@ -83,4 +83,9 @@ public class DataServlet extends HttpServlet {
       return new Comment(name, comment);
 
   }
+
+  private int getCommentNumber(HttpServletRequest request) {
+      String commentNumberString = request.getParameter("comment-number");
+      return Integer.parseInt(commentNumberString);
+  }
 }
