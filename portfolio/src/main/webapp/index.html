@@ -207,44 +207,21 @@
 
         <section id="comments">
           <h3>arrington's friends comments</h3>
-          <p>displaying <span class="num">4</span> of <span class="num">12345</span> comments</p>
+          <form action="/data?display=10" method="POST">
+                displaying 
+                <select name="num-comments" id="num-comments" onchange="this.form.submit()">
+                <option>10</option>
+                <option>25</option>
+                <option>50</option></select> comments.
+          </form>
           <table id="comment-section">
-                <tr>
-                    <th>charlie brown <img class="center" src="images/charlie.jpg" width="200" height="200"></th>
-                    <td id="text">arrington is super cool and the most amazing person on the planet.</td>
-                </tr>
-                <tr>
-                    <th>woodstock <img class="center" src="images/woodstock.jpg" width="200" height="200"></th>
-                    <td>*bird noises*</td>
-                </tr>
-                <tr>
-                    <th>lucy <img class="center" src="images/lucy.jpg" width="200" height="200"></th>
-                    <td>i'll hold the ball and you kick it. it's thanksgiving</td>
-                </tr>
-                <tr>
-                    <th>
-                        charlie brown's mom <img class="center" src="images/not-found.png" width="200" height="200">
-                        </th>
-                    <td>
-                        wah wah wah wah wah waah wah wah. wah wah waaah wah wah wah wah waah wahh wah. 
-                        wah wah wah wah wah waah wah wah waaah wah wah. wah wah wah waah wah wah wahwah waaah wah wah wah.
-                         wah waah wah.
-                         </td>
-                </tr>
             </table>
             <form action="/data" method="POST">
                 <p>Enter your name:</p>
-                <input type="text" name="name">
+                <input type="text" name="name" required>
                 <p>Add a comment:</p>
-                <input type="text" name="comment">
+                <input type="text" name="comment" required>
                 <br/><br/>
-                displaying 
-                <select name="display-num" size="3">
-                <option selected>10</option>
-                <option>25</option>
-                <option>50</option>comments.
-            <br/>
-            <br/>
             <input type="submit" />
     </form>
         </section>

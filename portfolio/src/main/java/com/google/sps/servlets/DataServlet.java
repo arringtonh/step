@@ -35,14 +35,17 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private int numComments = 10;
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      //addMessages();
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
 
       ArrayList<Comment> comments = new ArrayList<>();
+      
+      int displayNum = numComments;
       for (Entity entity : results.asIterable()) {
           String name = (String) entity.getProperty("name");
           String content = (String) entity.getProperty("content");
@@ -50,6 +53,10 @@ public class DataServlet extends HttpServlet {
 
           Comment comment = new Comment(name, content, timestamp);
           comments.add(comment);
+
+          displayNum--;
+          if (displayNum == 0)
+            break;
       }
 
       String json = convertToJsonUsingGson(comments);
@@ -60,14 +67,16 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Comment comment = makeComment(request);
+      numComments = getCommentNumber(request);
+      if (comment != null) {
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("name", comment.getName());
+        commentEntity.setProperty("content", comment.getContent());
+        commentEntity.setProperty("timestamp", comment.getDate());
 
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      Entity commentEntity = new Entity("Comment");
-      commentEntity.setProperty("name", comment.getName());
-      commentEntity.setProperty("content", comment.getContent());
-      commentEntity.setProperty("timestamp", comment.getDate());
-
-      datastore.put(commentEntity);
+        datastore.put(commentEntity);
+      }
       response.sendRedirect("/index.html");
   }
 
@@ -80,12 +89,17 @@ public class DataServlet extends HttpServlet {
   private Comment makeComment(HttpServletRequest request) {
       String name = request.getParameter("name");
       String comment = request.getParameter("comment");
-      return new Comment(name, comment);
-
+      if (name == null && comment == null)
+        return null;
+      else
+        return new Comment(name, comment);
   }
 
   private int getCommentNumber(HttpServletRequest request) {
-      String commentNumberString = request.getParameter("comment-number");
+      String commentNumberString = request.getParameter("num-comments");
+      System.out.println(commentNumberString);
+      if (commentNumberString == null)
+        return numComments;
       return Integer.parseInt(commentNumberString);
   }
 }
