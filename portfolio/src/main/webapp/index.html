@@ -208,7 +208,7 @@
         <section id="comments">
           <h3>arrington's friends comments</h3>
           <p>displaying <span class="num">4</span> of <span class="num">12345</span> comments</p>
-          <table>
+          <table id="comment-section">
                 <tr>
                     <th>charlie brown <img class="center" src="images/charlie.jpg" width="200" height="200"></th>
                     <td id="text">arrington is super cool and the most amazing person on the planet.</td>
@@ -233,11 +233,18 @@
                 </tr>
             </table>
             <form action="/data" method="POST">
-
+                <p>Enter your name:</p>
+                <input type="text" name="name">
                 <p>Add a comment:</p>
                 <input type="text" name="comment">
                 <br/><br/>
-
+                displaying 
+                <select name="display-num" size="3">
+                <option selected>10</option>
+                <option>25</option>
+                <option>50</option>comments.
+            <br/>
+            <br/>
             <input type="submit" />
     </form>
         </section>
