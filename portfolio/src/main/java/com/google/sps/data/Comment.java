@@ -8,11 +8,18 @@ import java.util.Date;
 public class Comment {
     private String name; // name of the commenter
     private String content; // content of the comment
-    private final Date date = new Date(); // date the comment was left
+    private Date date; // date the comment was left
 
     public Comment(String name, String content) {
         this.name = name;
         this.content = content;
+        this.date = new Date();
+    }
+
+    public Comment(String name, String content, Date date) {
+        this.name = name;
+        this.content = content;
+        this.date = date;
     }
 
     public String getName() {

@@ -55,9 +55,9 @@ function handleResponse(response) {
 function addTextToDom(text) {
     console.log("Adding text to DOM: "+text);
     const table = document.getElementById("comment-section");
-    const parsedText = JSON.parse(text); // text is a string and not an array
+    const parsedText = JSON.parse(text);
 
-    var i; 
+    var i;
     for (i = 0; i < parsedText.length; i++) {
         const comment = parsedText[i];
         const heading = ` (posted at ${comment.date})`;
@@ -66,16 +66,16 @@ function addTextToDom(text) {
     }
 }
 
-function makeComment(name, comment) {
+function makeComment(heading, content) {
     const row = document.createElement("tr")
-    const heading = document.createElement("th");
-    const data = document.createElement("td");
+    const th = document.createElement("th");
+    const td = document.createElement("td");
 
-    heading.innerText = name;
-    data.innerText = comment;
+    th.innerText = heading;
+    td.innerText = content;
 
-    row.appendChild(heading);
-    row.appendChild(data)
+    row.appendChild(th);
+    row.appendChild(td)
 
     return row;
 }
