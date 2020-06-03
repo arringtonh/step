@@ -24,6 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
@@ -47,6 +51,14 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Comment comment = getComment(request);
       messages.add(comment);
+
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      Entity commentEntity = new Entity("Comment");
+      commentEntity.setProperty("name", comment.getName());
+      commentEntity.setProperty("content", comment.getContent());
+      commentEntity.setProperty("timestamp", comment.getDate());
+
+      datastore.put(commentEntity);
       response.sendRedirect("/index.html");
   }
 
