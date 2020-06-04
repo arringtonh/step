@@ -118,3 +118,15 @@ function deleteTextFromDom(text) {
         comment.remove();
     }
 }
+
+function changeButtonValUp() {
+    const pagination = document.getElementById("pag");
+    pagination.value = 1;
+    console.log(document.getElementById("pag").value);
+}
+
+function changeButtonValDown() {
+    const pagination = document.getElementById("pag");
+    pagination.value = -1;
+    console.log(document.getElementById("pag").value);
+}

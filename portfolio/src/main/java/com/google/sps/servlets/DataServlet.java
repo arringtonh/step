@@ -38,13 +38,14 @@ import com.google.appengine.api.datastore.FetchOptions.Builder;
 public class DataServlet extends HttpServlet {
 
   private int numComments = 10;
-  private int offset = 0;
+  private int page = 0;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
+      int offset = page * numComments;
       FetchOptions options = FetchOptions.Builder.withLimit(numComments).offset(offset);
 
 
@@ -66,8 +67,10 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      changePage(request);
       Comment comment = makeComment(request);
       numComments = getCommentNumber(request);
+      
       if (comment != null) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity commentEntity = new Entity("Comment");
@@ -100,5 +103,11 @@ public class DataServlet extends HttpServlet {
       if (commentNumberString == null)
         return numComments;
       return Integer.parseInt(commentNumberString);
+  }
+
+  private void changePage(HttpServletRequest request) {
+      String pageString = request.getParameter("pag");
+      System.out.println(pageString);
+      page = page + Math.max(Integer.parseInt(pageString), 0);
   }
 }
