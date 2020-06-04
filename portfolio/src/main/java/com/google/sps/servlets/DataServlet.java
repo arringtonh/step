@@ -108,6 +108,6 @@ public class DataServlet extends HttpServlet {
   private void changePage(HttpServletRequest request) {
       String pageString = request.getParameter("pag");
       System.out.println(pageString);
-      page = page + Math.max(Integer.parseInt(pageString), 0);
+      page = Math.max(page + Integer.parseInt(pageString), 0);
   }
 }

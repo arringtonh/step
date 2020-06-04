@@ -44,7 +44,7 @@ function getMessages() {
     getDropdownVal()
     
     console.log("Fetching text.");
-    const responsePromise = fetch("/data");
+    const responsePromise = fetch("/data?pag=0");
     responsePromise.then(handleResponse);
 }
 
