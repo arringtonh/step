@@ -30,31 +30,33 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.FetchOptions.Builder;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
   private int numComments = 10;
+  private int offset = 0;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
+      FetchOptions options = FetchOptions.Builder.withLimit(numComments).offset(offset);
+
 
       ArrayList<Comment> comments = new ArrayList<>();
       
-      for (Entity entity : results.asIterable()) {
+      for (Entity entity : results.asList(options)) {
           String name = (String) entity.getProperty("name");
           String content = (String) entity.getProperty("content");
           Date timestamp = (Date) entity.getProperty("timestamp");
 
           Comment comment = new Comment(name, content, timestamp);
           comments.add(comment);
-
-          if (numComments <= comments.size())
-            break;
       }
 
       String json = convertToJsonUsingGson(comments);
