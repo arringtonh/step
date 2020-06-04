@@ -95,7 +95,6 @@ public class DataServlet extends HttpServlet {
 
   private int getCommentNumber(HttpServletRequest request) {
       String commentNumberString = request.getParameter("num-comments");
-      System.out.println(commentNumberString);
       if (commentNumberString == null)
         return numComments;
       return Integer.parseInt(commentNumberString);
