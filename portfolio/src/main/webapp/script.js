@@ -41,6 +41,8 @@ function age() {
 
 function getMessages() {
     age() // you can only have one function in the onload attribute
+    getDropdownVal()
+    
     console.log("Fetching text.");
     const responsePromise = fetch("/data");
     responsePromise.then(handleResponse);
@@ -78,4 +80,18 @@ function makeComment(heading, content) {
     row.appendChild(td)
 
     return row;
+}
+
+function getDropdownVal() {
+    const dropdown = document.getElementById("num-comments");
+    dropdown.onchange = changeDropdownVal;
+    if (localStorage["num-comments"]) {
+        dropdown.value = localStorage["num-comments"];
+    }   
+}
+
+function changeDropdownVal() {
+    const dropdown = document.getElementById("num-comments");
+    localStorage["num-comments"] = dropdown.value;
+    this.form.submit();
 }
