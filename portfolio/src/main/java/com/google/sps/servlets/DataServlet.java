@@ -45,7 +45,6 @@ public class DataServlet extends HttpServlet {
 
       ArrayList<Comment> comments = new ArrayList<>();
       
-      int displayNum = numComments;
       for (Entity entity : results.asIterable()) {
           String name = (String) entity.getProperty("name");
           String content = (String) entity.getProperty("content");
@@ -54,8 +53,7 @@ public class DataServlet extends HttpServlet {
           Comment comment = new Comment(name, content, timestamp);
           comments.add(comment);
 
-          displayNum--;
-          if (displayNum == 0)
+          if (numComments <= comments.size())
             break;
       }
 

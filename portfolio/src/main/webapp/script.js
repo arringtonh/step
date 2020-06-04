@@ -95,3 +95,27 @@ function changeDropdownVal() {
     localStorage["num-comments"] = dropdown.value;
     this.form.submit();
 }
+
+function deleteMessages() {
+    console.log("Fetching response.");
+    const responsePromise = fetch("/delete-data", "POST");
+    responsePromise.then(handleDelete);
+}
+
+function handleDelete(response) {
+    console.log("Handling the delete response.");
+    const deletePromise = response.text();
+    deletePromise.then(deleteTextFromDom);
+}
+
+function deleteTextFromDom(text) {
+    console.log("Deleting text from DOM: "+text);
+    const table = document.getElementById("comment-section");
+    const parsedText = JSON.parse(text);
+
+    var i;
+    for (i = 0; i < table.children.length; i++) {
+        const comment = table.children[i];
+        comment.remove();
+    }
+}
