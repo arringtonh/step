@@ -86,14 +86,14 @@ function makeComment(heading, content) {
 function getDropdownVal() {
     const dropdown = document.getElementById("num-comments");
     dropdown.onchange = changeDropdownVal;
-    if (localStorage["num-comments"]) {
-        dropdown.value = localStorage["num-comments"];
+    if (sessionStorage["num-comments"]) {
+        dropdown.value = sessionStorage["num-comments"];
     }   
 }
 
 function changeDropdownVal() {
     const dropdown = document.getElementById("num-comments");
-    localStorage["num-comments"] = dropdown.value;
+    sessionStorage["num-comments"] = dropdown.value;
     this.form.submit();
 }
 
@@ -122,23 +122,23 @@ function deleteTextFromDom(text) {
 
 function setCurrentPage() {
     const current = document.getElementById("current-page");
-    if (localStorage["current-page"]) {
-        current.innerText = localStorage["current-page"];
+    if (sessionStorage["current-page"]) {
+        current.innerText = sessionStorage["current-page"];
     } else {
-        localStorage["current-page"] = parseInt(current.innerText);
+        sessionStorage["current-page"] = 1;
     }
 }
 
 function changeButtonValUp() {
     const pagination = document.getElementById("pag");
     pagination.value = 1;
-    localStorage["current-page"]++;
+    sessionStorage["current-page"]++;
     setCurrentPage();
 }
 
 function changeButtonValDown() {
     const pagination = document.getElementById("pag");
     pagination.value = -1;
-    localStorage["current-page"]--;
+    sessionStorage["current-page"]--;
     setCurrentPage();
 }
