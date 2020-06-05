@@ -30,31 +30,34 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.FetchOptions.Builder;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
   private int numComments = 10;
+  private int page = 0;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
+      int offset = page * numComments;
+      FetchOptions options = FetchOptions.Builder.withLimit(numComments).offset(offset);
+
 
       ArrayList<Comment> comments = new ArrayList<>();
       
-      for (Entity entity : results.asIterable()) {
+      for (Entity entity : results.asList(options)) {
           String name = (String) entity.getProperty("name");
           String content = (String) entity.getProperty("content");
           Date timestamp = (Date) entity.getProperty("timestamp");
 
           Comment comment = new Comment(name, content, timestamp);
           comments.add(comment);
-
-          if (numComments <= comments.size())
-            break;
       }
 
       String json = convertToJsonUsingGson(comments);
@@ -64,8 +67,10 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      changePage(request);
       Comment comment = makeComment(request);
       numComments = getCommentNumber(request);
+      
       if (comment != null) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity commentEntity = new Entity("Comment");
@@ -98,5 +103,10 @@ public class DataServlet extends HttpServlet {
       if (commentNumberString == null)
         return numComments;
       return Integer.parseInt(commentNumberString);
+  }
+
+  private void changePage(HttpServletRequest request) {
+      String pageString = request.getParameter("pag");
+      page = Math.max(page + Integer.parseInt(pageString), 0);
   }
 }

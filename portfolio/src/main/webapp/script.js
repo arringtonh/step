@@ -42,9 +42,10 @@ function age() {
 function getMessages() {
     age() // you can only have one function in the onload attribute
     getDropdownVal()
+    setCurrentPage()
     
     console.log("Fetching text.");
-    const responsePromise = fetch("/data");
+    const responsePromise = fetch("/data?pag=0");
     responsePromise.then(handleResponse);
 }
 
@@ -85,14 +86,14 @@ function makeComment(heading, content) {
 function getDropdownVal() {
     const dropdown = document.getElementById("num-comments");
     dropdown.onchange = changeDropdownVal;
-    if (localStorage["num-comments"]) {
-        dropdown.value = localStorage["num-comments"];
+    if (sessionStorage["num-comments"]) {
+        dropdown.value = sessionStorage["num-comments"];
     }   
 }
 
 function changeDropdownVal() {
     const dropdown = document.getElementById("num-comments");
-    localStorage["num-comments"] = dropdown.value;
+    sessionStorage["num-comments"] = dropdown.value;
     this.form.submit();
 }
 
@@ -117,4 +118,29 @@ function deleteTextFromDom(text) {
         const comment = table.children[i];
         comment.remove();
     }
+}
+
+function setCurrentPage() {
+    const current = document.getElementById("current-page");
+    if (sessionStorage["current-page"]) {
+        current.innerText = sessionStorage["current-page"];
+    } else {
+        sessionStorage["current-page"] = 1;
+    }
+}
+
+function changeButtonValUp() {
+    const pagination = document.getElementById("pag");
+    pagination.value = 1;
+    sessionStorage["current-page"]++;
+    setCurrentPage();
+}
+
+function changeButtonValDown() {
+    const pagination = document.getElementById("pag");
+    pagination.value = -1;
+    if (sessionStorage["current-page"] > 1) {
+        sessionStorage["current-page"]--;
+    }
+    setCurrentPage();
 }

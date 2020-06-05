@@ -207,7 +207,7 @@
 
         <section id="comments">
           <h3>arrington's friends comments</h3>
-          <form action="/data" method="POST">
+          <form action="/data?pag=0" method="POST">
                 displaying 
                 <select name="num-comments" id="num-comments" onchange="this.form.submit()">
                 <option>10</option>
@@ -216,7 +216,15 @@
           </form>
           <table id="comment-section">
             </table>
-            <form action="/data" method="POST">
+            <form id="pag-form" action="/data" method="POST">
+            <div id="pag-div">
+                <button name="up" id="up" type="submit" onclick="changeButtonValDown()">&laquo;</button>
+                <span id="current-page">1</span>
+                <button name="down" id="down" type="submit" onclick="changeButtonValUp()">&raquo;</button>
+                <input type="hidden" name="pag" id="pag"/>
+            </div>
+            </form>
+            <form action="/data?pag=0" method="POST">         
                 <p>Enter your name:</p>
                 <input type="text" name="name" required>
                 <p>Add a comment:</p>
