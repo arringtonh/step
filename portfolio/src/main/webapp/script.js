@@ -122,12 +122,10 @@ function deleteTextFromDom(text) {
 
 function setCurrentPage() {
     const current = document.getElementById("current-page");
-    if (sessionStorage["current-page"]) {
-        current.innerText = sessionStorage["current-page"];
-    } else {
-        sessionStorage["current-page"] = 1;
-    }
+    sessionStorage["current-page"] = sessionStorage["current-page"] || 1;
+    current.innerText = sessionStorage["current-page"];
 }
+
 
 function changeButtonValUp() {
     const pagination = document.getElementById("pag");
