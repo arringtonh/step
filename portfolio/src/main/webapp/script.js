@@ -86,9 +86,8 @@ function makeComment(heading, content) {
 function getDropdownVal() {
     const dropdown = document.getElementById("num-comments");
     dropdown.onchange = changeDropdownVal;
-    if (sessionStorage["num-comments"]) {
-        dropdown.value = sessionStorage["num-comments"];
-    }   
+    sessionStorage["num-comments"] = sessionStorage["num-comments"] || 10;
+    dropdown.value = sessionStorage["num-comments"];
 }
 
 function changeDropdownVal() {
@@ -130,7 +129,14 @@ function setCurrentPage() {
 function changeButtonValUp() {
     const pagination = document.getElementById("pag");
     pagination.value = 1;
-    sessionStorage["current-page"]++;
+
+    const comments = document.getElementById("comment-section");
+    const numComments = comments.childElementCount;
+    console.log(numComments);
+    if (numComments == sessionStorage["num-comments"]) {
+        console.log("YOOOOOOO")
+        sessionStorage["current-page"]++;
+    }
     setCurrentPage();
 }
 
