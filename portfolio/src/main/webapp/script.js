@@ -42,6 +42,7 @@ function age() {
 function getMessages() {
     age() // you can only have one function in the onload attribute
     getDropdownVal()
+    setCurrentPage()
     
     console.log("Fetching text.");
     const responsePromise = fetch("/data?pag=0");
@@ -119,14 +120,25 @@ function deleteTextFromDom(text) {
     }
 }
 
+function setCurrentPage() {
+    const current = document.getElementById("current-page");
+    if (localStorage["current-page"]) {
+        current.innerText = localStorage["current-page"];
+    } else {
+        localStorage["current-page"] = parseInt(current.innerText);
+    }
+}
+
 function changeButtonValUp() {
     const pagination = document.getElementById("pag");
     pagination.value = 1;
-    console.log(document.getElementById("pag").value);
+    localStorage["current-page"]++;
+    setCurrentPage();
 }
 
 function changeButtonValDown() {
     const pagination = document.getElementById("pag");
     pagination.value = -1;
-    console.log(document.getElementById("pag").value);
+    localStorage["current-page"]--;
+    setCurrentPage();
 }
