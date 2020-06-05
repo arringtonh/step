@@ -139,6 +139,8 @@ function changeButtonValUp() {
 function changeButtonValDown() {
     const pagination = document.getElementById("pag");
     pagination.value = -1;
-    sessionStorage["current-page"]--;
+    if (sessionStorage["current-page"] > 1) {
+        sessionStorage["current-page"]--;
+    }
     setCurrentPage();
 }
