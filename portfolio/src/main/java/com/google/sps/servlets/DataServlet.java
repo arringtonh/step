@@ -45,10 +45,15 @@ public class DataServlet extends HttpServlet {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
+
+      int size = results.countEntities(FetchOptions.Builder.withDefaults());
       int offset = page * numComments;
+      if (offset > size) {
+          page--;
+          offset = page * numComments;
+      }
+    
       FetchOptions options = FetchOptions.Builder.withLimit(numComments).offset(offset);
-
-
       ArrayList<Comment> comments = new ArrayList<>();
       
       for (Entity entity : results.asList(options)) {
