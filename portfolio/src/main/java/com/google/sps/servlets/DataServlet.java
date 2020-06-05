@@ -48,7 +48,7 @@ public class DataServlet extends HttpServlet {
 
       int size = results.countEntities(FetchOptions.Builder.withDefaults());
       int offset = page * numComments;
-      if (offset > size) {
+      if (offset >= size) {
           page--;
           offset = page * numComments;
       }
