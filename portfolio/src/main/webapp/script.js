@@ -134,7 +134,6 @@ function changeButtonValUp() {
     const numComments = comments.childElementCount;
     console.log(numComments);
     if (numComments == sessionStorage["num-comments"]) {
-        console.log("YOOOOOOO")
         sessionStorage["current-page"]++;
     }
     setCurrentPage();
