@@ -43,6 +43,7 @@ function getMessages() {
     age() // you can only have one function in the onload attribute
     getDropdownVal()
     setCurrentPage()
+    login();
     
     console.log("Fetching text.");
     const responsePromise = fetch("/data?pag=0");
@@ -143,4 +144,23 @@ function changeButtonValDown() {
         sessionStorage["current-page"]--;
     }
     setCurrentPage();
+}
+
+function login() {
+    fetch("/home")
+    .then(response => response.text())
+    .then(text => {
+        const commentSection = document.getElementById("add-comment");
+        console.log(text)
+        const parsedText = JSON.parse(text);
+        const link = document.createElement("a");
+        link.setAttribute("href", parsedText.url);
+        if (parsedText.isLoggedIn) {
+            commentSection.removeAttribute("hidden");
+            link.innerText = "Logout here."
+        } else {
+            link.innerText = "Login here to comment."
+        }
+        document.getElementById("comments").appendChild(link);
+    })
 }

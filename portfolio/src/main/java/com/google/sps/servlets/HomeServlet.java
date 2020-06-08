@@ -3,6 +3,7 @@ package com.google.sps.servlets;
 import com.google.sps.data.Comment;
 import java.util.Date;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,15 +30,21 @@ public class HomeServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         UserService userService = UserServiceFactory.getUserService();
 
-        response.setContentType("text/html");
+        response.setContentType("application/json");
         if (!userService.isUserLoggedIn()) {
-            String loginUrl = userService.createLoginURL("/home");
-            out.println("Not logged in.");
-            out.println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
+            String loginUrl = userService.createLoginURL("/index.html");
+            out.println(convertJson(false, loginUrl));
         } else {
-            String logoutUrl = userService.createLogoutURL("/home");
-            out.println("Logged in!");
-            out.println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
+            String logoutUrl = userService.createLogoutURL("/index.html");
+            out.println(convertJson(true, logoutUrl));
         }
+  }
+
+  public String convertJson(Boolean isLoggedIn, String url) {
+      Gson gson = new Gson();
+      JsonObject obj = new JsonObject();
+      obj.addProperty("isLoggedIn", isLoggedIn);
+      obj.addProperty("url", url);
+      return gson.toJson(obj);
   }
 }
