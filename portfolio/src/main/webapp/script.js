@@ -86,7 +86,8 @@ function makeComment(heading, content) {
 function getDropdownVal() {
     const dropdown = document.getElementById("num-comments");
     dropdown.onchange = changeDropdownVal;
-    sessionStorage["num-comments"] = sessionStorage["num-comments"] || 10;
+    const defaultComments = 10;
+    sessionStorage["num-comments"] = sessionStorage["num-comments"] || defaultComments;
     dropdown.value = sessionStorage["num-comments"];
 }
 
@@ -121,7 +122,8 @@ function deleteTextFromDom(text) {
 
 function setCurrentPage() {
     const current = document.getElementById("current-page");
-    sessionStorage["current-page"] = sessionStorage["current-page"] || 1;
+    const defaultPage = 1;
+    sessionStorage["current-page"] = sessionStorage["current-page"] || defaultPage;
     current.innerText = sessionStorage["current-page"];
 }
 
