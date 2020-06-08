@@ -60,9 +60,13 @@ function addTextToDom(text) {
     const table = document.getElementById("comment-section");
     const parsedText = JSON.parse(text); // this is the object with properties numComments and comments
     parsedText.comments = JSON.parse(parsedText.comments);
+    sessionStorage["size"] = parsedText.comments.length;
 
     var i;
-    for (i = 0; i < parsedText.comments.length; i++) {
+    const currPage = sessionStorage["current-page"];
+    const startComment = (currPage - 1) * sessionStorage["num-comments"];
+    const commentsToShow = currPage * sessionStorage["num-comments"];
+    for (i = startComment; i < Math.min(sessionStorage["size"], commentsToShow); i++) {
         const comment = parsedText.comments[i];
         const heading = ` (posted at ${comment.date})`;
         const row = makeComment(comment.name + heading, comment.content);
@@ -86,7 +90,6 @@ function makeComment(heading, content) {
 
 function getDropdownVal() {
     const dropdown = document.getElementById("num-comments");
-    dropdown.onchange = changeDropdownVal;
     const defaultComments = 10;
     sessionStorage["num-comments"] = sessionStorage["num-comments"] || defaultComments;
     dropdown.value = sessionStorage["num-comments"];
@@ -95,7 +98,8 @@ function getDropdownVal() {
 function changeDropdownVal() {
     const dropdown = document.getElementById("num-comments");
     sessionStorage["num-comments"] = dropdown.value;
-    this.form.submit();
+    sessionStorage["current-page"] = 1; // go back to the first page of comments
+    document.getElementById("dropdown").submit();
 }
 
 function deleteMessages() {
@@ -130,19 +134,14 @@ function setCurrentPage() {
 
 
 function changeButtonValUp() {
-    const pagination = document.getElementById("pag");
-    pagination.value = 1;
-    const comments = document.getElementById("comment-section");
-    const numComments = comments.childElementCount;
-    if (numComments == sessionStorage["num-comments"]) {
+    const limit = Math.floor(sessionStorage["size"] / sessionStorage["num-comments"]);
+    if (sessionStorage["current-page"] < limit) {
         sessionStorage["current-page"]++;
     }
     setCurrentPage();
 }
 
 function changeButtonValDown() {
-    const pagination = document.getElementById("pag");
-    pagination.value = -1;
     if (sessionStorage["current-page"] > 1) {
         sessionStorage["current-page"]--;
     }
