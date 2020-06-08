@@ -47,11 +47,8 @@ public class DataServlet extends HttpServlet {
       PreparedQuery results = datastore.prepare(query);
 
       int size = results.countEntities(FetchOptions.Builder.withDefaults());
+      page = min(page,math.Floor(size/numComments))
       int offset = page * numComments;
-      if (offset >= size) {
-          page--;
-          offset = page * numComments;
-      }
     
       FetchOptions options = FetchOptions.Builder.withLimit(numComments).offset(offset);
       ArrayList<Comment> comments = new ArrayList<>();
