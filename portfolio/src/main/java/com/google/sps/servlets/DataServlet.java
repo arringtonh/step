@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 import com.google.sps.data.Comment;
 import java.util.Date;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,7 +48,7 @@ public class DataServlet extends HttpServlet {
       PreparedQuery results = datastore.prepare(query);
 
       int size = results.countEntities(FetchOptions.Builder.withDefaults());
-      page = min(page,math.Floor(size/numComments))
+      page = Math.min(page, size / numComments);
       int offset = page * numComments;
     
       FetchOptions options = FetchOptions.Builder.withLimit(numComments).offset(offset);
@@ -62,7 +63,7 @@ public class DataServlet extends HttpServlet {
           comments.add(comment);
       }
 
-      String json = convertToJsonUsingGson(comments);
+      String json = convertToJsonUsingGson(comments, size);
       response.setContentType("application/json;");
       response.getWriter().println(json);
   }
@@ -85,9 +86,14 @@ public class DataServlet extends HttpServlet {
       response.sendRedirect("/index.html");
   }
 
-  private String convertToJsonUsingGson(ArrayList<Comment> comments) {
+  private String convertToJsonUsingGson(ArrayList<Comment> comments, int numComments) {
     Gson gson = new Gson();
-    String json = gson.toJson(comments);
+
+    JsonObject obj = new JsonObject();
+    String jsonComments = gson.toJson(comments);
+    obj.addProperty("comments", jsonComments);
+    obj.addProperty("numComments", numComments);
+    String json = gson.toJson(obj);
     return json;
   }
 

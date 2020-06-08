@@ -58,11 +58,12 @@ function handleResponse(response) {
 function addTextToDom(text) {
     console.log("Adding text to DOM: "+text);
     const table = document.getElementById("comment-section");
-    const parsedText = JSON.parse(text);
+    const parsedText = JSON.parse(text); // this is the object with properties numComments and comments
+    parsedText.comments = JSON.parse(parsedText.comments);
 
     var i;
-    for (i = 0; i < parsedText.length; i++) {
-        const comment = parsedText[i];
+    for (i = 0; i < parsedText.comments.length; i++) {
+        const comment = parsedText.comments[i];
         const heading = ` (posted at ${comment.date})`;
         const row = makeComment(comment.name + heading, comment.content);
         table.appendChild(row);
