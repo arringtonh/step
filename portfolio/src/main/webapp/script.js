@@ -131,10 +131,8 @@ function setCurrentPage() {
 function changeButtonValUp() {
     const pagination = document.getElementById("pag");
     pagination.value = 1;
-
     const comments = document.getElementById("comment-section");
     const numComments = comments.childElementCount;
-    console.log(numComments);
     if (numComments == sessionStorage["num-comments"]) {
         sessionStorage["current-page"]++;
     }
