@@ -33,6 +33,9 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.FetchOptions.Builder;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
@@ -47,6 +50,7 @@ public class DataServlet extends HttpServlet {
       PreparedQuery results = datastore.prepare(query);
       int offset = page * numComments;
       FetchOptions options = FetchOptions.Builder.withLimit(numComments).offset(offset);
+      UserService userService = UserServiceFactory.getUserService();
 
 
       ArrayList<Comment> comments = new ArrayList<>();
@@ -55,8 +59,9 @@ public class DataServlet extends HttpServlet {
           String name = (String) entity.getProperty("name");
           String content = (String) entity.getProperty("content");
           Date timestamp = (Date) entity.getProperty("timestamp");
+          String email = (String) entity.getProperty("email");
 
-          Comment comment = new Comment(name, content, timestamp);
+          Comment comment = new Comment(name, content, timestamp, email);
           comments.add(comment);
       }
 
@@ -71,12 +76,14 @@ public class DataServlet extends HttpServlet {
       Comment comment = makeComment(request);
       numComments = getCommentNumber(request);
       
+      
       if (comment != null) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("name", comment.getName());
         commentEntity.setProperty("content", comment.getContent());
         commentEntity.setProperty("timestamp", comment.getDate());
+        commentEntity.setProperty("email", comment.getEmail());
 
         datastore.put(commentEntity);
       }
@@ -90,12 +97,13 @@ public class DataServlet extends HttpServlet {
   }
 
   private Comment makeComment(HttpServletRequest request) {
+      UserService userService = UserServiceFactory.getUserService();
       String name = request.getParameter("name");
       String comment = request.getParameter("comment");
       if (name == null && comment == null)
         return null;
       else
-        return new Comment(name, comment);
+        return new Comment(name, comment, userService.getCurrentUser().getEmail());
   }
 
   private int getCommentNumber(HttpServletRequest request) {
