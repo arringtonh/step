@@ -160,6 +160,7 @@ function login() {
             document.getElementById("name-link").hidden = false;
             link.innerText = "Logout here."
         } else {
+            commentSection.hidden = true;
             document.getElementById("name-link").hidden = true;
             link.innerText = "Login here to comment."
         }
