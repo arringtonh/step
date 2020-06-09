@@ -224,9 +224,13 @@
                 <input type="hidden" name="pag" id="pag"/>
             </div>
             </form>
-            <form id="add-comment" action="/data?pag=0" method="POST" hidden>         
-                <p>Enter your name:</p>
-                <input type="text" name="name" required>
+            <a href="#" onclick="getUsername(); return false;">Set/change username</a>
+            <form id="nickname" action="/nickname" method="POST" hidden>
+                <p>Set a nickname:</p>
+                <input type="text" name="name" hidden>
+            </form>
+            <form id="add-comment" action="/data?pag=0" method="POST" hidden>
+                
                 <p>Add a comment:</p>
                 <input type="text" name="comment" id="comment" required>
                 <br/><br/>
