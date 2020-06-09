@@ -330,6 +330,26 @@ img {
   width: auto;
 }
 
+form {
+  margin: 0.5em;
+}
+
+form p {
+  margin: 0.25em;
+}
+
+#comment {
+  height: 100px;
+}
+
+input {
+  width: 100%;
+}
+
+#pag-form {
+  text-align: center;
+}
+
 .block {
   background-color: rgb(181, 214, 255);
   padding: 0.25em;
