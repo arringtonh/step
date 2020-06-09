@@ -61,7 +61,6 @@ function addTextToDom(text) {
     const table = document.getElementById("comment-section");
     table.innerHTML = ""; // clears all the content of the table
     const parsedText = JSON.parse(text); // this is the object with properties numComments and comments
-    parsedText.comments = JSON.parse(parsedText.comments);
     sessionStorage["size"] = parsedText.numComments;
 
     var i;

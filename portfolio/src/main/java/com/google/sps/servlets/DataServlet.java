@@ -18,6 +18,7 @@ import com.google.sps.data.Comment;
 import java.util.Date;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -88,8 +89,11 @@ public class DataServlet extends HttpServlet {
     Gson gson = new Gson();
 
     JsonObject obj = new JsonObject();
-    String jsonComments = gson.toJson(comments);
-    obj.addProperty("comments", jsonComments);
+    JsonArray jsonComments = new JsonArray();
+    for (int i = 0; i < comments.size(); i++) {
+        jsonComments.add(comments.get(i).getJsonObject());
+    }
+    obj.add("comments", jsonComments);
     obj.addProperty("numComments", numComments);
     String json = gson.toJson(obj);
     return json;
