@@ -43,6 +43,7 @@ function getMessages() {
     age() // you can only have one function in the onload attribute
     getDropdownVal()
     setCurrentPage()
+    login();
     
     console.log("Fetching text.");
     const responsePromise = fetch("/data?pag=0");
@@ -68,7 +69,7 @@ function addTextToDom(text) {
     const commentsToShow = currPage * sessionStorage["num-comments"];
     for (i = startComment; i < Math.min(sessionStorage["size"], commentsToShow); i++) {
         const comment = parsedText.comments[i];
-        const heading = ` (posted at ${comment.date})`;
+        const heading = ` (${comment.email}, posted at ${comment.date})`;
         const row = makeComment(comment.name + heading, comment.content);
         table.appendChild(row);
     }
@@ -146,4 +147,36 @@ function changeButtonValDown() {
         sessionStorage["current-page"]--;
     }
     setCurrentPage();
+}
+
+function login() {
+    fetch("/home")
+    .then(response => response.text())
+    .then(text => {
+        const commentSection = document.getElementById("add-comment");
+        console.log(text)
+        const parsedText = JSON.parse(text);
+        const link = document.createElement("a");
+        link.setAttribute("href", parsedText.url);
+        if (parsedText.isLoggedIn) {
+            commentSection.removeAttribute("hidden");
+            document.getElementById("name-link").hidden = false;
+            link.innerText = "Logout here."
+        } else {
+            commentSection.hidden = true;
+            document.getElementById("name-link").hidden = true;
+            link.innerText = "Login here to comment."
+        }
+        document.getElementById("comments").appendChild(link);
+    })
+}
+
+function getUsername() {
+    document.getElementById("name-link").hidden = true;
+    document.getElementById("nickname").removeAttribute("hidden");
+}
+
+function submitUsername() {
+    document.getElementById("nickname").hidden = true;
+    document.getElementById("name-link").removeAttribute("hidden");
 }
