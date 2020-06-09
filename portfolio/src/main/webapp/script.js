@@ -135,11 +135,13 @@ function setCurrentPage() {
 
 
 function changeButtonValUp() {
-    const limit = Math.floor(sessionStorage["size"] / sessionStorage["num-comments"]);
+    const limit = Math.ceil(sessionStorage["size"] / sessionStorage["num-comments"]);
+    console.log(limit)
     if (sessionStorage["current-page"] < limit) {
         sessionStorage["current-page"]++;
     }
     setCurrentPage();
+    document.getElementById("pag-form").submit();
 }
 
 function changeButtonValDown() {
@@ -147,6 +149,8 @@ function changeButtonValDown() {
         sessionStorage["current-page"]--;
     }
     setCurrentPage();
+    console.log("bruv")
+    document.getElementById("pag-form").submit();
 }
 
 function login() {
