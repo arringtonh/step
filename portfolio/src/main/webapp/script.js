@@ -60,7 +60,7 @@ function addTextToDom(text) {
     const table = document.getElementById("comment-section");
     const parsedText = JSON.parse(text); // this is the object with properties numComments and comments
     parsedText.comments = JSON.parse(parsedText.comments);
-    sessionStorage["size"] = parsedText.comments.length;
+    sessionStorage["size"] = parsedText.numComments;
 
     var i;
     const currPage = sessionStorage["current-page"];
