@@ -42,6 +42,7 @@ public class DataServlet extends HttpServlet {
 
   private int numComments = 10;
   private int page = 0;
+  UserService userService = UserServiceFactory.getUserService();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -50,7 +51,6 @@ public class DataServlet extends HttpServlet {
       PreparedQuery results = datastore.prepare(query);
       int offset = page * numComments;
       FetchOptions options = FetchOptions.Builder.withLimit(numComments).offset(offset);
-      UserService userService = UserServiceFactory.getUserService();
 
 
       ArrayList<Comment> comments = new ArrayList<>();
@@ -97,7 +97,6 @@ public class DataServlet extends HttpServlet {
   }
 
   private Comment makeComment(HttpServletRequest request) {
-      UserService userService = UserServiceFactory.getUserService();
       String name = request.getParameter("name");
       String comment = request.getParameter("comment");
       if (name == null && comment == null)

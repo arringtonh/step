@@ -25,10 +25,10 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
+    UserService userService = UserServiceFactory.getUserService();
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
-        UserService userService = UserServiceFactory.getUserService();
 
         response.setContentType("application/json");
         if (!userService.isUserLoggedIn()) {
