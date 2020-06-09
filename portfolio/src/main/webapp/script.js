@@ -59,6 +59,7 @@ function handleResponse(response) {
 function addTextToDom(text) {
     console.log("Adding text to DOM: "+text);
     const table = document.getElementById("comment-section");
+    table.innerHTML = ""; // clears all the content of the table
     const parsedText = JSON.parse(text); // this is the object with properties numComments and comments
     parsedText.comments = JSON.parse(parsedText.comments);
     sessionStorage["size"] = parsedText.numComments;
@@ -91,7 +92,7 @@ function makeComment(heading, content) {
 
 function getDropdownVal() {
     const dropdown = document.getElementById("num-comments");
-    const defaultComments = 10;
+    const defaultComments = 10; // move to top later
     sessionStorage["num-comments"] = sessionStorage["num-comments"] || defaultComments;
     dropdown.value = sessionStorage["num-comments"];
 }
@@ -141,7 +142,7 @@ function changeButtonValUp() {
         sessionStorage["current-page"]++;
     }
     setCurrentPage();
-    document.getElementById("pag-form").submit();
+    getMessages();
 }
 
 function changeButtonValDown() {
@@ -149,8 +150,7 @@ function changeButtonValDown() {
         sessionStorage["current-page"]--;
     }
     setCurrentPage();
-    console.log("bruv")
-    document.getElementById("pag-form").submit();
+    getMessages();
 }
 
 function login() {
