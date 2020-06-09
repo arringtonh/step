@@ -224,10 +224,11 @@
                 <input type="hidden" name="pag" id="pag"/>
             </div>
             </form>
-            <a href="#" onclick="getUsername(); return false;">Set/change username</a>
+            <a id="name-link" href="#" onclick="getUsername();return false;" hidden>Set/change username</a>
             <form id="nickname" action="/nickname" method="POST" hidden>
                 <p>Set a nickname:</p>
-                <input type="text" name="name" hidden>
+                <input type="text" name="name">
+                <button type="submit" onsubmit="submitUsername()">submit</button>
             </form>
             <form id="add-comment" action="/data?pag=0" method="POST" hidden>
                 

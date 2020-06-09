@@ -157,10 +157,22 @@ function login() {
         link.setAttribute("href", parsedText.url);
         if (parsedText.isLoggedIn) {
             commentSection.removeAttribute("hidden");
+            document.getElementById("name-link").hidden = false;
             link.innerText = "Logout here."
         } else {
+            document.getElementById("name-link").hidden = true;
             link.innerText = "Login here to comment."
         }
         document.getElementById("comments").appendChild(link);
     })
+}
+
+function getUsername() {
+    document.getElementById("name-link").hidden = true;
+    document.getElementById("nickname").removeAttribute("hidden");
+}
+
+function submitUsername() {
+    document.getElementById("nickname").hidden = true;
+    document.getElementById("name-link").removeAttribute("hidden");
 }
