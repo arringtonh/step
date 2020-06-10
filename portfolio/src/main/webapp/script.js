@@ -41,12 +41,13 @@ function age() {
 
 function getMessages() {
     age() // you can only have one function in the onload attribute
-    getDropdownVal()
-    setCurrentPage()
+    getDropdownVal();
+    setCurrentPage();
     login();
     
     console.log("Fetching text.");
-    const responsePromise = fetch("/data?pag=0");
+    const url = "?comments-to-show="+sessionStorage["num-comments"]+"&page-number="+sessionStorage["current-page"]
+    const responsePromise = fetch("/data"+url);
     responsePromise.then(handleResponse);
 }
 
@@ -64,10 +65,12 @@ function addTextToDom(text) {
     sessionStorage["size"] = parsedText.numComments;
 
     var i;
-    const currPage = sessionStorage["current-page"];
-    const startComment = (currPage - 1) * sessionStorage["num-comments"];
-    const commentsToShow = currPage * sessionStorage["num-comments"];
-    for (i = startComment; i < Math.min(sessionStorage["size"], commentsToShow); i++) {
+    // const currPage = sessionStorage["current-page"];
+    // const startComment = (currPage - 1) * sessionStorage["num-comments"];
+    // const commentsToShow = currPage * sessionStorage["num-comments"];
+    // for (i = startComment; i < Math.min(sessionStorage["size"], commentsToShow); i++) {
+
+    for (i = 0; i < parsedText.comments.length; i++) {
         const comment = parsedText.comments[i];
         const heading = ` (${comment.email}, posted at ${comment.date})`;
         const row = makeComment(comment.name + heading, comment.content);
@@ -136,7 +139,6 @@ function setCurrentPage() {
 
 function changeButtonValUp() {
     const limit = Math.ceil(sessionStorage["size"] / sessionStorage["num-comments"]);
-    console.log(limit)
     if (sessionStorage["current-page"] < limit) {
         sessionStorage["current-page"]++;
     }
@@ -157,9 +159,8 @@ function login() {
     .then(response => response.text())
     .then(text => {
         const commentSection = document.getElementById("add-comment");
-        console.log(text)
         const parsedText = JSON.parse(text);
-        const link = document.createElement("a");
+        const link = document.getElementById("login-link");
         link.setAttribute("href", parsedText.url);
         if (parsedText.isLoggedIn) {
             commentSection.removeAttribute("hidden");
@@ -170,7 +171,6 @@ function login() {
             document.getElementById("name-link").hidden = true;
             link.innerText = "Login here to comment."
         }
-        document.getElementById("comments").appendChild(link);
     })
 }
 

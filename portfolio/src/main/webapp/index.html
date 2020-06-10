@@ -229,13 +229,14 @@
                 <input type="text" name="name">
                 <button type="submit" onsubmit="submitUsername()">submit</button>
             </form>
-            <form id="add-comment" action="/data?pag=0" method="POST" hidden>
+            <form id="add-comment" action="/data" method="POST" hidden>
                 <p>Add a comment:</p>
                 <input type="text" name="comment" id="comment" required>
                 <br/><br/>
                 <button type="button" onclick="deleteMessages()">delete all comments</button>
             <button type="submit">submit</button>
     </form>
+        <a id="login-link"></a>
         </section>
     </div>
     </div>

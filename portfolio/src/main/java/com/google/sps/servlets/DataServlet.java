@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -48,11 +49,15 @@ public class DataServlet extends HttpServlet {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
+      
+      int limit = getLimit(request);
+      int offset = getOffset(request);
+      FetchOptions options = FetchOptions.Builder.withLimit(limit).offset(offset);
 
       int size = results.countEntities(FetchOptions.Builder.withDefaults());
     
       ArrayList<Comment> comments = new ArrayList<>();
-      for (Entity entity : results.asIterable()) {
+      for (Entity entity : results.asList(options)) {
           String name = (String) entity.getProperty("name");
           String content = (String) entity.getProperty("content");
           Date timestamp = (Date) entity.getProperty("timestamp");
@@ -106,5 +111,27 @@ public class DataServlet extends HttpServlet {
         return null;
       else
         return new Comment(name, comment, userService.getCurrentUser().getEmail());
+  }
+
+  private int getLimit(HttpServletRequest request) {
+      String numberString = request.getParameter("comments-to-show");
+      String pageString = request.getParameter("page-number");
+
+      int commentsToShow = Integer.parseInt(numberString);
+      int currPage = Integer.parseInt(pageString);
+
+      int limit = currPage * commentsToShow;
+      return limit;
+  }
+
+  private int getOffset(HttpServletRequest request) {
+      String numberString = request.getParameter("comments-to-show");
+      String pageString = request.getParameter("page-number");
+
+      int commentsToShow = Integer.parseInt(numberString);
+      int currPage = Integer.parseInt(pageString);
+
+      int offset = (currPage - 1) * commentsToShow;
+      return offset;
   }
 }
