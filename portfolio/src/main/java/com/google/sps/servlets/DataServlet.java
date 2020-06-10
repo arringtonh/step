@@ -59,9 +59,8 @@ public class DataServlet extends HttpServlet {
           String name = (String) entity.getProperty("name");
           String content = (String) entity.getProperty("content");
           Date timestamp = (Date) entity.getProperty("timestamp");
-          String email = (String) entity.getProperty("email");
 
-          Comment comment = new Comment(name, content, timestamp, email);
+          Comment comment = new Comment(name, content, timestamp);
           comments.add(comment);
       }
 
@@ -83,7 +82,6 @@ public class DataServlet extends HttpServlet {
         commentEntity.setProperty("name", getNickname(userService.getCurrentUser().getUserId()));
         commentEntity.setProperty("content", comment.getContent());
         commentEntity.setProperty("timestamp", comment.getDate());
-        commentEntity.setProperty("email", comment.getEmail());
 
         datastore.put(commentEntity);
       }
@@ -102,7 +100,7 @@ public class DataServlet extends HttpServlet {
       if (name == null && comment == null)
         return null;
       else
-        return new Comment(name, comment, userService.getCurrentUser().getEmail());
+        return new Comment(name, comment);
   }
 
   private int getCommentNumber(HttpServletRequest request) {
