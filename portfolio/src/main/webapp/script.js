@@ -141,17 +141,15 @@ function changeButtonValUp() {
     const limit = Math.ceil(sessionStorage["size"] / sessionStorage["num-comments"]);
     if (sessionStorage["current-page"] < limit) {
         sessionStorage["current-page"]++;
+        getMessages();
     }
-    setCurrentPage();
-    getMessages();
 }
 
 function changeButtonValDown() {
     if (sessionStorage["current-page"] > 1) {
         sessionStorage["current-page"]--;
+        getMessages();
     }
-    setCurrentPage();
-    getMessages();
 }
 
 function login() {
