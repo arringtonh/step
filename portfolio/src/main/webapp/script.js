@@ -197,4 +197,11 @@ function createMap() {
         position: snoopy,
         map: map
     });
+
+    var infowindow = new google.maps.InfoWindow({
+        content: "apparently this place is called snoopy" +
+        " island because it looks like snoopy, but i "
+        + "honestly don't see it"
+    });
+    infowindow.open(map, marker); 
 }
