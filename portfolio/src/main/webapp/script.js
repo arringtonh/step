@@ -44,6 +44,7 @@ function getMessages() {
     getDropdownVal()
     setCurrentPage()
     login();
+    createMap();
     
     console.log("Fetching text.");
     const responsePromise = fetch("/data?pag=0");
@@ -176,4 +177,10 @@ function getUsername() {
 function submitUsername() {
     document.getElementById("nickname").hidden = true;
     document.getElementById("name-link").removeAttribute("hidden");
+}
+
+function createMap() {
+  const map = new google.maps.Map(
+      document.getElementById("map"),
+      {center: {lat: 37.422, lng: -122.084}, zoom: 16});
 }
