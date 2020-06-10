@@ -97,7 +97,7 @@ public class DataServlet extends HttpServlet {
   }
 
   private Comment makeComment(HttpServletRequest request) {
-      String name = request.getParameter("name");
+      String name = request.getParameter(userService.getCurrentUser().getUserId()));
       String comment = request.getParameter("comment");
       if (name == null && comment == null)
         return null;
