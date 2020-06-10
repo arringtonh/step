@@ -365,8 +365,11 @@ input {
   margin: 0.25em;
 }
 
+#map-section {
+  border: solid rgb(73, 146, 255) 2px;
+}
+
 #map {
   height:27vh;
-  width:99%;
-  border: solid rgb(73, 146, 255) 2px;
+  width:100%;
 }
