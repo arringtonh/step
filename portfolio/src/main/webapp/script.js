@@ -64,7 +64,7 @@ function addTextToDom(text) {
     var i;
     for (i = 0; i < parsedText.length; i++) {
         const comment = parsedText[i];
-        const heading = ` (${comment.email}, posted at ${comment.date})`;
+        const heading = ` (posted at ${comment.date})`;
         const row = makeComment(comment.name + heading, comment.content);
         table.appendChild(row);
     }
