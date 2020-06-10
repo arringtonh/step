@@ -80,7 +80,7 @@ public class DataServlet extends HttpServlet {
       if (comment != null) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("name", comment.getName());
+        commentEntity.setProperty("name", getNickname(userService.getCurrentUser().getUserId()));
         commentEntity.setProperty("content", comment.getContent());
         commentEntity.setProperty("timestamp", comment.getDate());
         commentEntity.setProperty("email", comment.getEmail());
@@ -115,5 +115,19 @@ public class DataServlet extends HttpServlet {
   private void changePage(HttpServletRequest request) {
       String pageString = request.getParameter("pag");
       page = Math.max(page + Integer.parseInt(pageString), 0);
+  }
+
+    public String getNickname(String id) {
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query query =
+        new Query("UserInfo")
+            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+        PreparedQuery results = datastore.prepare(query);
+        Entity entity = results.asSingleEntity();
+        if (entity == null) {
+            return "";
+        }
+        String nickname = (String) entity.getProperty("nickname");
+        return nickname;
   }
 }

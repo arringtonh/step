@@ -16,25 +16,38 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/nickname")
 public class NicknameServlet extends HttpServlet {
+
+    UserService userService = UserServiceFactory.getUserService();
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
-        UserService userService = UserServiceFactory.getUserService();
         
     }
     
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Entity commentEntity = new Entity("UserInfo");
+        if (!userService.isUserLoggedIn()) {
+            response.sendRedirect("/index.html");
+            return;
+        }
+        String nickname = request.getParameter("name");
+        String id = userService.getCurrentUser().getUserId();
+
+        Entity userEntity = new Entity("UserInfo");
+        userEntity.setProperty("id", id);
+        userEntity.setProperty("nickname", nickname);
+        datastore.put(userEntity);
+
         response.sendRedirect("/index.html");
     }
 
-    public String getUsername(String email) {
+    public String getNickname(String id) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query query =
         new Query("UserInfo")
-            .setFilter(new Query.FilterPredicate("email", Query.FilterOperator.EQUAL, email));
+            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
         PreparedQuery results = datastore.prepare(query);
         Entity entity = results.asSingleEntity();
         if (entity == null) {
