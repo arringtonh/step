@@ -65,11 +65,6 @@ function addTextToDom(text) {
     sessionStorage["size"] = parsedText.numComments;
 
     var i;
-    // const currPage = sessionStorage["current-page"];
-    // const startComment = (currPage - 1) * sessionStorage["num-comments"];
-    // const commentsToShow = currPage * sessionStorage["num-comments"];
-    // for (i = startComment; i < Math.min(sessionStorage["size"], commentsToShow); i++) {
-
     for (i = 0; i < parsedText.comments.length; i++) {
         const comment = parsedText.comments[i];
         const heading = ` (${comment.email}, posted at ${comment.date})`;
