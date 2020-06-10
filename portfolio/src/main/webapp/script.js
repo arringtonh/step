@@ -41,12 +41,13 @@ function age() {
 
 function getMessages() {
     age() // you can only have one function in the onload attribute
-    getDropdownVal()
-    setCurrentPage()
+    getDropdownVal();
+    setCurrentPage();
     login();
     
     console.log("Fetching text.");
-    const responsePromise = fetch("/data?pag=0");
+    const url = "?comments-to-show="+sessionStorage["num-comments"]+"&page-number="+sessionStorage["current-page"]
+    const responsePromise = fetch("/data"+url);
     responsePromise.then(handleResponse);
 }
 
@@ -59,11 +60,13 @@ function handleResponse(response) {
 function addTextToDom(text) {
     console.log("Adding text to DOM: "+text);
     const table = document.getElementById("comment-section");
-    const parsedText = JSON.parse(text);
+    table.innerHTML = ""; // clears all the content of the table
+    const parsedText = JSON.parse(text); // this is the object with properties numComments and comments
+    sessionStorage["size"] = parsedText.numComments;
 
     var i;
-    for (i = 0; i < parsedText.length; i++) {
-        const comment = parsedText[i];
+    for (i = 0; i < parsedText.comments.length; i++) {
+        const comment = parsedText.comments[i];
         const heading = ` (${comment.email}, posted at ${comment.date})`;
         const row = makeComment(comment.name + heading, comment.content);
         table.appendChild(row);
@@ -86,16 +89,16 @@ function makeComment(heading, content) {
 
 function getDropdownVal() {
     const dropdown = document.getElementById("num-comments");
-    dropdown.onchange = changeDropdownVal;
-    if (sessionStorage["num-comments"]) {
-        dropdown.value = sessionStorage["num-comments"];
-    }   
+    const defaultComments = 10; // move to top later
+    sessionStorage["num-comments"] = sessionStorage["num-comments"] || defaultComments;
+    dropdown.value = sessionStorage["num-comments"];
 }
 
 function changeDropdownVal() {
     const dropdown = document.getElementById("num-comments");
     sessionStorage["num-comments"] = dropdown.value;
-    this.form.submit();
+    sessionStorage["current-page"] = 1; // go back to the first page of comments
+    document.getElementById("dropdown").submit();
 }
 
 function deleteMessages() {
@@ -123,27 +126,25 @@ function deleteTextFromDom(text) {
 
 function setCurrentPage() {
     const current = document.getElementById("current-page");
-    if (sessionStorage["current-page"]) {
-        current.innerText = sessionStorage["current-page"];
-    } else {
-        sessionStorage["current-page"] = 1;
-    }
+    const defaultPage = 1;
+    sessionStorage["current-page"] = sessionStorage["current-page"] || defaultPage;
+    current.innerText = sessionStorage["current-page"];
 }
 
+
 function changeButtonValUp() {
-    const pagination = document.getElementById("pag");
-    pagination.value = 1;
-    sessionStorage["current-page"]++;
-    setCurrentPage();
+    const limit = Math.ceil(sessionStorage["size"] / sessionStorage["num-comments"]);
+    if (sessionStorage["current-page"] < limit) {
+        sessionStorage["current-page"]++;
+        getMessages();
+    }
 }
 
 function changeButtonValDown() {
-    const pagination = document.getElementById("pag");
-    pagination.value = -1;
     if (sessionStorage["current-page"] > 1) {
         sessionStorage["current-page"]--;
+        getMessages();
     }
-    setCurrentPage();
 }
 
 function login() {
@@ -151,9 +152,8 @@ function login() {
     .then(response => response.text())
     .then(text => {
         const commentSection = document.getElementById("add-comment");
-        console.log(text)
         const parsedText = JSON.parse(text);
-        const link = document.createElement("a");
+        const link = document.getElementById("login-link");
         link.setAttribute("href", parsedText.url);
         if (parsedText.isLoggedIn) {
             commentSection.removeAttribute("hidden");
@@ -164,7 +164,6 @@ function login() {
             document.getElementById("name-link").hidden = true;
             link.innerText = "Login here to comment."
         }
-        document.getElementById("comments").appendChild(link);
     })
 }
 

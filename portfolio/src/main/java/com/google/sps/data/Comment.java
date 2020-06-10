@@ -3,7 +3,8 @@
  */
 package com.google.sps.data;
 import java.util.Date;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 public class Comment {
     private String name; // name of the commenter
@@ -39,5 +40,15 @@ public class Comment {
 
     public String getEmail() {
         return email;
+    }
+
+    public JsonObject getJsonObject() {
+        Gson gson = new Gson();
+        JsonObject obj = new JsonObject();
+        obj.addProperty("name", name);
+        obj.addProperty("content", content);
+        obj.addProperty("date", date.toString());
+        obj.addProperty("email", email);
+        return obj;
     }
 }
