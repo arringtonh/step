@@ -20,12 +20,6 @@ public class NicknameServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        PrintWriter out = response.getWriter();
-        
-    }
-    
-    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         if (!userService.isUserLoggedIn()) {
