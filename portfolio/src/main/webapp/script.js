@@ -69,23 +69,45 @@ function addTextToDom(text) {
     for (i = 0; i < parsedText.comments.length; i++) {
         const comment = parsedText.comments[i];
         const heading = ` (${comment.email}, posted at ${comment.date})`;
-        const row = makeComment(comment.name + heading, comment.content);
+        const row = makeComment(comment.name + heading, comment.content, comment.isOwnComment);
         table.appendChild(row);
     }
 }
 
-function makeComment(heading, content) {
+function makeComment(heading, content, isOwnComment) {
     const row = document.createElement("tr")
-    const th = document.createElement("th");
-    const td = document.createElement("td");
 
-    th.innerText = heading;
+    var th = document.createElement("th");
+    if (isOwnComment) {
+        th = addDeleteButton(heading);
+    } else {
+        th.innerText = heading;
+    }
+    
+    const td = document.createElement("td");
     td.innerText = content;
 
     row.appendChild(th);
     row.appendChild(td)
 
     return row;
+}
+
+function addDeleteButton(heading) {
+    const th = document.createElement("th");
+    th.innerText = heading;
+
+    const form = document.createElement("form");
+    form.setAttribute("action", "/delete-data");
+    form.setAttribute("method", "POST");
+
+    const button = document.createElement("button");
+    button.setAttribute("type", "submit");
+    button.innerText = "delete comment";
+
+    form.appendChild(button);
+    th.append(form);
+    return th;
 }
 
 function getDropdownVal() {
