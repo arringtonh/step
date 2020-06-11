@@ -44,10 +44,10 @@ import com.google.appengine.api.users.UserServiceFactory;
 public class DataServlet extends HttpServlet {
 
   UserService userService = UserServiceFactory.getUserService();
+  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
       
       int limit = getLimit(request);
@@ -77,7 +77,6 @@ public class DataServlet extends HttpServlet {
       
       
       if (comment != null) {
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("content", comment.getContent());
         commentEntity.setProperty("timestamp", comment.getDate());
@@ -133,7 +132,6 @@ public class DataServlet extends HttpServlet {
   }
 
     public String getNickname(String id) {
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query query =
         new Query("UserInfo")
             .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));

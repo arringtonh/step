@@ -18,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 public class NicknameServlet extends HttpServlet {
 
     UserService userService = UserServiceFactory.getUserService();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         if (!userService.isUserLoggedIn()) {
             response.sendRedirect("/index.html");
             return;
@@ -38,7 +38,6 @@ public class NicknameServlet extends HttpServlet {
     }
 
     public String getNickname(String id) {
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query query =
         new Query("UserInfo")
             .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
