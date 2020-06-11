@@ -44,7 +44,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 public class DataServlet extends HttpServlet {
 
   UserService userService = UserServiceFactory.getUserService();
-  String id = userService.getCurrentUser().getUserId();
+  String userId = userService.getCurrentUser().getUserId();
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
@@ -63,8 +63,9 @@ public class DataServlet extends HttpServlet {
           String content = (String) entity.getProperty("content");
           Date timestamp = (Date) entity.getProperty("timestamp");
           String email = (String) entity.getProperty("email");
+          long commentId = entity.getKey().getId();
 
-          Comment comment = new Comment(name, content, timestamp, email, id);
+          Comment comment = new Comment(name, content, timestamp, email, userId, commentId);
           comments.add(comment);
       }
 
@@ -75,7 +76,8 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      Comment comment = makeComment(request);
+      Comment comment = makeComment(request); // this comment is basically to get help extract the
+                                              // values more cleanly to make an entity
       
       
       if (comment != null) {
@@ -85,7 +87,7 @@ public class DataServlet extends HttpServlet {
         commentEntity.setProperty("content", comment.getContent());
         commentEntity.setProperty("timestamp", comment.getDate());
         commentEntity.setProperty("email", comment.getEmail());
-        commentEntity.setProperty("id", id);
+        commentEntity.setProperty("userId", userId);
 
         datastore.put(commentEntity);
       }
@@ -100,7 +102,7 @@ public class DataServlet extends HttpServlet {
     for (int i = 0; i < comments.size(); i++) {
         Comment current = comments.get(i);
         JsonObject commentObj = current.getJsonObject();
-        commentObj.addProperty("isOwnComment", current.isSameId(id));
+        commentObj.addProperty("isOwnComment", current.isSameUserId(userId));
         jsonComments.add(commentObj);
     }
     obj.add("comments", jsonComments);
@@ -115,7 +117,7 @@ public class DataServlet extends HttpServlet {
       if (name == null && comment == null)
         return null;
       else
-        return new Comment(name, comment, userService.getCurrentUser().getEmail(), id);
+        return new Comment(name, comment, userService.getCurrentUser().getEmail(), userId);
   }
 
   private int getLimit(HttpServletRequest request) {

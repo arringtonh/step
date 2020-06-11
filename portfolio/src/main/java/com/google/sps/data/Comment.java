@@ -11,22 +11,24 @@ public class Comment {
     private String content; // content of the comment
     private Date date; // date the comment was left
     private String email;
-    private String id;
+    private String userId;
+    private long commentId;
 
-    public Comment(String name, String content, String email, String id) {
+    public Comment(String name, String content, String email, String userId) {
         this.name = name;
         this.content = content;
         this.date = new Date();
         this.email = email;
-        this.id = id;
+        this.userId = userId;
     }
 
-    public Comment(String name, String content, Date date, String email, String id) {
+    public Comment(String name, String content, Date date, String email, String userId, long commentId) {
         this.name = name;
         this.content = content;
         this.date = date;
         this.email = email;
-        this.id = id;
+        this.userId = userId;
+        this.commentId = commentId;
     }
 
     public String getName() {
@@ -52,10 +54,15 @@ public class Comment {
         obj.addProperty("content", content);
         obj.addProperty("date", date.toString());
         obj.addProperty("email", email);
+        obj.addProperty("commentId", commentId);
         return obj;
     }
 
-    public boolean isSameId(String id) {
-        return (this.id == id);
+    public boolean isSameUserId(String userId) {
+        return (this.userId == userId);
+    }
+
+    public long getCommentId() {
+        return this.commentId;
     }
 }
