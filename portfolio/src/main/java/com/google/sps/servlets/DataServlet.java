@@ -44,6 +44,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 public class DataServlet extends HttpServlet {
 
   UserService userService = UserServiceFactory.getUserService();
+  String id = userService.getCurrentUser().getUserId();
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
@@ -63,7 +64,7 @@ public class DataServlet extends HttpServlet {
           Date timestamp = (Date) entity.getProperty("timestamp");
           String email = (String) entity.getProperty("email");
 
-          Comment comment = new Comment(name, content, timestamp, email);
+          Comment comment = new Comment(name, content, timestamp, email, id);
           comments.add(comment);
       }
 
@@ -84,6 +85,7 @@ public class DataServlet extends HttpServlet {
         commentEntity.setProperty("content", comment.getContent());
         commentEntity.setProperty("timestamp", comment.getDate());
         commentEntity.setProperty("email", comment.getEmail());
+        commentEntity.setProperty("id", id);
 
         datastore.put(commentEntity);
       }
@@ -96,7 +98,10 @@ public class DataServlet extends HttpServlet {
     JsonObject obj = new JsonObject();
     JsonArray jsonComments = new JsonArray();
     for (int i = 0; i < comments.size(); i++) {
-        jsonComments.add(comments.get(i).getJsonObject());
+        Comment current = comments.get(i);
+        JsonObject commentObj = current.getJsonObject();
+        commentObj.addProperty("isOwnComment", current.isSameId(id));
+        jsonComments.add(commentObj);
     }
     obj.add("comments", jsonComments);
     obj.addProperty("numComments", numComments);
@@ -110,7 +115,7 @@ public class DataServlet extends HttpServlet {
       if (name == null && comment == null)
         return null;
       else
-        return new Comment(name, comment, userService.getCurrentUser().getEmail());
+        return new Comment(name, comment, userService.getCurrentUser().getEmail(), id);
   }
 
   private int getLimit(HttpServletRequest request) {
