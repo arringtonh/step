@@ -56,7 +56,7 @@ public class DataServlet extends HttpServlet {
       ArrayList<Comment> comments = new ArrayList<>();
       
       for (Entity entity : results.asList(options)) {
-          String name = (String) entity.getProperty("name");
+          String name = getNickname(userService.getCurrentUser().getUserId());
           String content = (String) entity.getProperty("content");
           Date timestamp = (Date) entity.getProperty("timestamp");
 
@@ -79,7 +79,6 @@ public class DataServlet extends HttpServlet {
       if (comment != null) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("name", getNickname(userService.getCurrentUser().getUserId()));
         commentEntity.setProperty("content", comment.getContent());
         commentEntity.setProperty("timestamp", comment.getDate());
 
@@ -95,7 +94,7 @@ public class DataServlet extends HttpServlet {
   }
 
   private Comment makeComment(HttpServletRequest request) {
-      String name = request.getParameter(userService.getCurrentUser().getUserId()));
+      String name = userService.getCurrentUser().getUserId();
       String comment = request.getParameter("comment");
       if (name == null && comment == null)
         return null;

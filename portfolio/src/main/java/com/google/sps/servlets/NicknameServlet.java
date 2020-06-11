@@ -35,7 +35,7 @@ public class NicknameServlet extends HttpServlet {
         String nickname = request.getParameter("name");
         String id = userService.getCurrentUser().getUserId();
 
-        Entity userEntity = new Entity("UserInfo");
+        Entity userEntity = new Entity("UserInfo", id);
         userEntity.setProperty("id", id);
         userEntity.setProperty("nickname", nickname);
         datastore.put(userEntity);
