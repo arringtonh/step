@@ -35,17 +35,12 @@ public class Comment {
         return date;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public JsonObject getJsonObject() {
         Gson gson = new Gson();
         JsonObject obj = new JsonObject();
         obj.addProperty("name", name);
         obj.addProperty("content", content);
         obj.addProperty("date", date.toString());
-        obj.addProperty("email", email);
         return obj;
     }
 }
