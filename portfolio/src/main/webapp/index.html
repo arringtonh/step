@@ -207,9 +207,9 @@
 
         <section id="comments">
           <h3>arrington's friends comments</h3>
-          <form action="/data?pag=0" method="POST">
+          <form id="dropdown">
                 displaying 
-                <select name="num-comments" id="num-comments" onchange="this.form.submit()">
+                <select name="num-comments" id="num-comments" onchange="changeDropdownVal()">
                 <option>10</option>
                 <option>25</option>
                 <option>50</option></select> comments.
@@ -218,10 +218,9 @@
             </table>
             <form id="pag-form" action="/data" method="POST">
             <div id="pag-div">
-                <button name="up" id="up" type="submit" onclick="changeButtonValDown()">&laquo;</button>
+                <button name="up" id="up" type="button" onclick="changeButtonValDown()">&laquo;</button>
                 <span id="current-page">1</span>
-                <button name="down" id="down" type="submit" onclick="changeButtonValUp()">&raquo;</button>
-                <input type="hidden" name="pag" id="pag"/>
+                <button name="down" id="down" type="button" onclick="changeButtonValUp()">&raquo;</button>
             </div>
             </form>
             <a id="name-link" href="#" onclick="getUsername();return false;" hidden>Set/change username</a>
@@ -230,14 +229,14 @@
                 <input type="text" name="name">
                 <button type="submit" onsubmit="submitUsername()">submit</button>
             </form>
-            <form id="add-comment" action="/data?pag=0" method="POST" hidden>
-                
+            <form id="add-comment" action="/data" method="POST" hidden>
                 <p>Add a comment:</p>
                 <input type="text" name="comment" id="comment" required>
                 <br/><br/>
                 <button type="button" onclick="deleteMessages()">delete all comments</button>
             <button type="submit">submit</button>
     </form>
+        <a id="login-link"></a>
         </section>
     </div>
     </div>

@@ -17,12 +17,15 @@ package com.google.sps.servlets;
 import com.google.sps.data.Comment;
 import java.util.Date;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -40,21 +43,20 @@ import com.google.appengine.api.users.UserServiceFactory;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  private int numComments = 10;
-  private int page = 0;
   UserService userService = UserServiceFactory.getUserService();
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
-      int offset = page * numComments;
-      FetchOptions options = FetchOptions.Builder.withLimit(numComments).offset(offset);
-
-
-      ArrayList<Comment> comments = new ArrayList<>();
       
+      int limit = getLimit(request);
+      int offset = getOffset(request);
+      FetchOptions options = FetchOptions.Builder.withLimit(limit).offset(offset);
+
+      int size = results.countEntities(FetchOptions.Builder.withDefaults());
+    
+      ArrayList<Comment> comments = new ArrayList<>();
       for (Entity entity : results.asList(options)) {
           String name = getNickname(userService.getCurrentUser().getUserId());
           String content = (String) entity.getProperty("content");
@@ -64,16 +66,14 @@ public class DataServlet extends HttpServlet {
           comments.add(comment);
       }
 
-      String json = convertToJsonUsingGson(comments);
+      String json = convertToJsonUsingGson(comments, size);
       response.setContentType("application/json;");
       response.getWriter().println(json);
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      changePage(request);
       Comment comment = makeComment(request);
-      numComments = getCommentNumber(request);
       
       
       if (comment != null) {
@@ -87,9 +87,17 @@ public class DataServlet extends HttpServlet {
       response.sendRedirect("/index.html");
   }
 
-  private String convertToJsonUsingGson(ArrayList<Comment> comments) {
+  private String convertToJsonUsingGson(ArrayList<Comment> comments, int numComments) {
     Gson gson = new Gson();
-    String json = gson.toJson(comments);
+
+    JsonObject obj = new JsonObject();
+    JsonArray jsonComments = new JsonArray();
+    for (int i = 0; i < comments.size(); i++) {
+        jsonComments.add(comments.get(i).getJsonObject());
+    }
+    obj.add("comments", jsonComments);
+    obj.addProperty("numComments", numComments);
+    String json = gson.toJson(obj);
     return json;
   }
 
@@ -102,16 +110,26 @@ public class DataServlet extends HttpServlet {
         return new Comment(name, comment);
   }
 
-  private int getCommentNumber(HttpServletRequest request) {
-      String commentNumberString = request.getParameter("num-comments");
-      if (commentNumberString == null)
-        return numComments;
-      return Integer.parseInt(commentNumberString);
+  private int getLimit(HttpServletRequest request) {
+      String numberString = request.getParameter("comments-to-show");
+      String pageString = request.getParameter("page-number");
+
+      int commentsToShow = Integer.parseInt(numberString);
+      int currPage = Integer.parseInt(pageString);
+
+      int limit = currPage * commentsToShow;
+      return limit;
   }
 
-  private void changePage(HttpServletRequest request) {
-      String pageString = request.getParameter("pag");
-      page = Math.max(page + Integer.parseInt(pageString), 0);
+  private int getOffset(HttpServletRequest request) {
+      String numberString = request.getParameter("comments-to-show");
+      String pageString = request.getParameter("page-number");
+
+      int commentsToShow = Integer.parseInt(numberString);
+      int currPage = Integer.parseInt(pageString);
+
+      int offset = (currPage - 1) * commentsToShow;
+      return offset;
   }
 
     public String getNickname(String id) {

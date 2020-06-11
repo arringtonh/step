@@ -32,6 +32,6 @@ public class DeleteServlet extends HttpServlet {
       for (Entity entity : results.asIterable()) {
           datastore.delete(entity.getKey());
       }
-      response.getWriter().print("empty response");
+      response.sendRedirect("/index.html");
   }
 }
