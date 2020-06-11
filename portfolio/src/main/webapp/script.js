@@ -67,7 +67,8 @@ function addTextToDom(text) {
     var i;
     for (i = 0; i < parsedText.comments.length; i++) {
         const comment = parsedText.comments[i];
-        const heading = ` (posted at ${comment.date})`;
+        const date = convertMillisToDate(comment.date);
+        const heading = ` (posted at ${date})`;
         const row = makeComment(comment.name + heading, comment.content);
         table.appendChild(row);
     }
@@ -175,4 +176,10 @@ function getUsername() {
 function submitUsername() {
     document.getElementById("nickname").hidden = true;
     document.getElementById("name-link").removeAttribute("hidden");
+}
+
+// convert date in milliseconds to local time
+function convertMillisToDate(millis) {
+    const date = new Date(millis);
+    return date.toLocaleString();
 }
