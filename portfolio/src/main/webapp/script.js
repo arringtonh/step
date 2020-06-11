@@ -69,17 +69,17 @@ function addTextToDom(text) {
     for (i = 0; i < parsedText.comments.length; i++) {
         const comment = parsedText.comments[i];
         const heading = ` (${comment.email}, posted at ${comment.date})`;
-        const row = makeComment(comment.name + heading, comment.content, comment.isOwnComment);
+        const row = makeComment(comment.name + heading, comment.content, comment.isOwnComment, comment.commentId);
         table.appendChild(row);
     }
 }
 
-function makeComment(heading, content, isOwnComment) {
+function makeComment(heading, content, isOwnComment, commentId) {
     const row = document.createElement("tr")
 
     var th = document.createElement("th");
     if (isOwnComment) {
-        th = addDeleteButton(heading);
+        th = addDeleteButton(heading, commentId);
     } else {
         th.innerText = heading;
     }
@@ -93,7 +93,7 @@ function makeComment(heading, content, isOwnComment) {
     return row;
 }
 
-function addDeleteButton(heading) {
+function addDeleteButton(heading, commentId) {
     const th = document.createElement("th");
     th.innerText = heading;
 
@@ -105,7 +105,13 @@ function addDeleteButton(heading) {
     button.setAttribute("type", "submit");
     button.innerText = "delete comment";
 
+    const id = document.createElement("input");
+    id.name = "comment-id"
+    id.setAttribute("type", "hidden");
+    id.value = commentId;
+
     form.appendChild(button);
+    form.appendChild(id);
     th.append(form);
     return th;
 }
