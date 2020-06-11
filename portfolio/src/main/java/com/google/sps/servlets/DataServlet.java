@@ -107,7 +107,7 @@ public class DataServlet extends HttpServlet {
 
   // creates a comment object from the form data
   private Comment makeComment(HttpServletRequest request) {
-      String name = userService.getCurrentUser().getUserId();
+      String name = getNickname(userService.getCurrentUser().getUserId());
       String comment = request.getParameter("comment");
       if (name == null && comment == null)
         return null;
@@ -118,7 +118,7 @@ public class DataServlet extends HttpServlet {
   // calculates the number of comments to send (which is just comments-to-show)
   private int getLimit(HttpServletRequest request) {
       String commentsToShowString = request.getParameter("comments-to-show");
-      int limit = Integer.parseInt(numberString);
+      int limit = Integer.parseInt(commentsToShowString);
       return limit;
   }
 
