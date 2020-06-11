@@ -44,6 +44,7 @@ function getMessages() {
     getDropdownVal();
     setCurrentPage();
     login();
+    createMap();
     
     console.log("Fetching text.");
     const url = "?comments-to-show="+sessionStorage["num-comments"]+"&page-number="+sessionStorage["current-page"]
@@ -175,4 +176,31 @@ function getUsername() {
 function submitUsername() {
     document.getElementById("nickname").hidden = true;
     document.getElementById("name-link").removeAttribute("hidden");
+}
+
+function createMap() {
+    const snoopy = {
+        lat: 25.4924, 
+        lng: 56.3641
+    };
+
+    const map = new google.maps.Map(
+        document.getElementById("map"),
+        {
+            center: snoopy,
+            mapTypeId: 'satellite', 
+            zoom: 18
+        });
+
+    const marker = new google.maps.Marker({
+        position: snoopy,
+        map: map
+    });
+
+    var infowindow = new google.maps.InfoWindow({
+        content: "apparently this place is called snoopy" +
+        " island because it looks like snoopy, but i "
+        + "honestly don't see it"
+    });
+    infowindow.open(map, marker); 
 }
