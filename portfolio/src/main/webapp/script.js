@@ -65,8 +65,8 @@ function addTextToDom(text) {
     sessionStorage["size"] = parsedText.numComments;
 
     var i;
-    for (i = 0; i < parsedText.length; i++) {
-        const comment = parsedText[i];
+    for (i = 0; i < parsedText.comments.length; i++) {
+        const comment = parsedText.comments[i];
         const heading = ` (posted at ${comment.date})`;
         const row = makeComment(comment.name + heading, comment.content);
         table.appendChild(row);
