@@ -20,6 +20,7 @@ public class NicknameServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
+    // creates and stores a UserInfo entity, which holds the user ID and nickname, from form data
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (!userService.isUserLoggedIn()) {
@@ -37,6 +38,7 @@ public class NicknameServlet extends HttpServlet {
         response.sendRedirect("/index.html");
     }
 
+    // gets the nickname of the user from their ID
     public String getNickname(String id) {
         Query query =
         new Query("UserInfo")

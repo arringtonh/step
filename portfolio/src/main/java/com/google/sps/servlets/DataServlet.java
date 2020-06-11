@@ -45,13 +45,16 @@ public class DataServlet extends HttpServlet {
 
   UserService userService = UserServiceFactory.getUserService();
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+
+  // sends the appropriate amount of comments to the client along with the number of comments
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
       PreparedQuery results = datastore.prepare(query);
       
-      int limit = getLimit(request);
-      int offset = getOffset(request);
+      int limit = getLimit(request);  // the number of comments to send
+      int offset = getOffset(request);  // comment to start from
       FetchOptions options = FetchOptions.Builder.withLimit(limit).offset(offset);
 
       int size = results.countEntities(FetchOptions.Builder.withDefaults());
@@ -71,6 +74,7 @@ public class DataServlet extends HttpServlet {
       response.getWriter().println(json);
   }
 
+    // collects comment data from the form
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Comment comment = makeComment(request);
@@ -86,6 +90,7 @@ public class DataServlet extends HttpServlet {
       response.sendRedirect("/index.html");
   }
 
+  // transforms the comments objects and the number of comments into JSON  
   private String convertToJsonUsingGson(ArrayList<Comment> comments, int numComments) {
     Gson gson = new Gson();
 
@@ -100,6 +105,7 @@ public class DataServlet extends HttpServlet {
     return json;
   }
 
+  // creates a comment object from the form data
   private Comment makeComment(HttpServletRequest request) {
       String name = userService.getCurrentUser().getUserId();
       String comment = request.getParameter("comment");
@@ -109,6 +115,7 @@ public class DataServlet extends HttpServlet {
         return new Comment(name, comment);
   }
 
+  // calculates the number of comments to send (which is just comments-to-show)
   private int getLimit(HttpServletRequest request) {
       String numberString = request.getParameter("comments-to-show");
       String pageString = request.getParameter("page-number");
@@ -120,6 +127,7 @@ public class DataServlet extends HttpServlet {
       return limit;
   }
 
+  // calculate what comment to begin at
   private int getOffset(HttpServletRequest request) {
       String numberString = request.getParameter("comments-to-show");
       String pageString = request.getParameter("page-number");
@@ -130,7 +138,8 @@ public class DataServlet extends HttpServlet {
       int offset = (currPage - 1) * commentsToShow;
       return offset;
   }
-
+    
+    // gets the nickname of the user from their ID
     public String getNickname(String id) {
         Query query =
         new Query("UserInfo")
