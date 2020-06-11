@@ -117,13 +117,8 @@ public class DataServlet extends HttpServlet {
 
   // calculates the number of comments to send (which is just comments-to-show)
   private int getLimit(HttpServletRequest request) {
-      String numberString = request.getParameter("comments-to-show");
-      String pageString = request.getParameter("page-number");
-
-      int commentsToShow = Integer.parseInt(numberString);
-      int currPage = Integer.parseInt(pageString);
-
-      int limit = currPage * commentsToShow;
+      String commentsToShowString = request.getParameter("comments-to-show");
+      int limit = Integer.parseInt(numberString);
       return limit;
   }
 
