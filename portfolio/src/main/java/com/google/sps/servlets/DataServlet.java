@@ -44,7 +44,6 @@ import com.google.appengine.api.users.UserServiceFactory;
 public class DataServlet extends HttpServlet {
 
   UserService userService = UserServiceFactory.getUserService();
-  String userId = userService.getCurrentUser().getUserId();
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
@@ -63,6 +62,7 @@ public class DataServlet extends HttpServlet {
           String content = (String) entity.getProperty("content");
           Date timestamp = (Date) entity.getProperty("timestamp");
           String email = (String) entity.getProperty("email");
+          String userId = (String) entity.getProperty("userId");
           long commentId = entity.getKey().getId();
 
           Comment comment = new Comment(name, content, timestamp, email, userId, commentId);
@@ -76,9 +76,9 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      String userId = userService.getCurrentUser().getUserId();
       Comment comment = makeComment(request); // this comment is basically to get help extract the
                                               // values more cleanly to make an entity
-      
       
       if (comment != null) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -95,6 +95,12 @@ public class DataServlet extends HttpServlet {
   }
 
   private String convertToJsonUsingGson(ArrayList<Comment> comments, int numComments) {
+      String userId = "";
+      if (userService.isUserLoggedIn()) {
+          userId = userService.getCurrentUser().getUserId();
+      } else {
+          userId = null;
+      }
     Gson gson = new Gson();
 
     JsonObject obj = new JsonObject();
@@ -112,6 +118,7 @@ public class DataServlet extends HttpServlet {
   }
 
   private Comment makeComment(HttpServletRequest request) {
+      String userId = userService.getCurrentUser().getUserId();
       String name = request.getParameter("name");
       String comment = request.getParameter("comment");
       if (name == null && comment == null)

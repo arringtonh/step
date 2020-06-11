@@ -59,7 +59,7 @@ public class Comment {
     }
 
     public boolean isSameUserId(String userId) {
-        return (this.userId == userId);
+        return this.userId.equals(userId);
     }
 
     public long getCommentId() {
