@@ -117,12 +117,7 @@ function handleDelete(response) {
 function deleteTextFromDom(text) {
     console.log("Deleting text from DOM: "+text);
     const table = document.getElementById("comment-section");
-
-    var i;
-    for (i = 0; i < table.children.length; i++) {
-        const comment = table.children[i];
-        comment.remove();
-    }
+    table.innerHTML = "";
 }
 
 function setCurrentPage() {
