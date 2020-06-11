@@ -67,7 +67,7 @@ function addTextToDom(text) {
     var i;
     for (i = 0; i < parsedText.comments.length; i++) {
         const comment = parsedText.comments[i];
-        const date = convertMillisToDate(comment.date);
+        const date = convertMillisToDate(comment.timestamp);
         const heading = ` (posted at ${date})`;
         const row = makeComment(comment.name + heading, comment.content);
         table.appendChild(row);
@@ -180,6 +180,6 @@ function submitUsername() {
 
 // convert date in milliseconds to local time
 function convertMillisToDate(millis) {
-    const date = new Date(millis);
+    const date = new Date(parseInt(millis));
     return date.toLocaleString();
 }

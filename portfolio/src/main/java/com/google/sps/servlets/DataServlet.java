@@ -63,7 +63,7 @@ public class DataServlet extends HttpServlet {
       for (Entity entity : results.asList(options)) {
           String name = getNickname(userService.getCurrentUser().getUserId());
           String content = (String) entity.getProperty("content");
-          Date timestamp = (Date) entity.getProperty("timestamp");
+          long timestamp = (long) entity.getProperty("timestamp");
 
           Comment comment = new Comment(name, content, timestamp);
           comments.add(comment);
@@ -83,7 +83,7 @@ public class DataServlet extends HttpServlet {
       if (comment != null) {
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("content", comment.getContent());
-        commentEntity.setProperty("timestamp", comment.getDate());
+        commentEntity.setProperty("timestamp", comment.getTimestamp());
 
         datastore.put(commentEntity);
       }
