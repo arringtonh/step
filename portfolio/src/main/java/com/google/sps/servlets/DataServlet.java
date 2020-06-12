@@ -96,12 +96,9 @@ public class DataServlet extends HttpServlet {
 
   // transforms the comments objects and the number of comments into JSON  
   private String convertToJsonUsingGson(ArrayList<Comment> comments, int numComments) {
-      String userId = "";
+      String userId = null;
       if (userService.isUserLoggedIn()) {
           userId = userService.getCurrentUser().getUserId();
-      } else {
-          userId = null;
-      }
     Gson gson = new Gson();
 
     JsonObject obj = new JsonObject();
