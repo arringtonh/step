@@ -61,10 +61,10 @@ public class DataServlet extends HttpServlet {
     
       ArrayList<Comment> comments = new ArrayList<>();
       for (Entity entity : results.asList(options)) {
-          String name = getNickname(userService.getCurrentUser().getUserId());
           String content = (String) entity.getProperty("content");
           long timestamp = (long) entity.getProperty("timestamp");
           String userId = (String) entity.getProperty("userId");
+          String name = (String) getNickname(userId);
           long commentId = entity.getKey().getId();
 
           Comment comment = new Comment(name, content, timestamp, userId, commentId);
@@ -87,7 +87,6 @@ public class DataServlet extends HttpServlet {
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("content", comment.getContent());
         commentEntity.setProperty("timestamp", comment.getTimestamp());
-        commentEntity.setProperty("email", comment.getEmail());
         commentEntity.setProperty("userId", userId);
 
         datastore.put(commentEntity);

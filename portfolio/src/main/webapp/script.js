@@ -197,6 +197,7 @@ function submitUsername() {
 function convertMillisToDate(millis) {
     const date = new Date(parseInt(millis));
     return date.toLocaleString();
+}
 
 function createMap() {
     const snoopy = {
