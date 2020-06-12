@@ -68,7 +68,8 @@ function addTextToDom(text) {
     var i;
     for (i = 0; i < parsedText.comments.length; i++) {
         const comment = parsedText.comments[i];
-        const heading = ` (${comment.email}, posted at ${comment.date})`;
+        const date = convertMillisToDate(comment.timestamp);
+        const heading = ` (posted at ${date})`;
         const row = makeComment(comment.name + heading, comment.content, comment.isOwnComment, comment.commentId);
         table.appendChild(row);
     }
@@ -190,6 +191,12 @@ function submitUsername() {
     document.getElementById("nickname").hidden = true;
     document.getElementById("name-link").removeAttribute("hidden");
 }
+
+
+// convert date in milliseconds to local time
+function convertMillisToDate(millis) {
+    const date = new Date(parseInt(millis));
+    return date.toLocaleString();
 
 function createMap() {
     const snoopy = {
