@@ -79,7 +79,6 @@ public class DataServlet extends HttpServlet {
     // collects comment data from the form
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String userId = userService.getCurrentUser().getUserId();
       Comment comment = makeComment(request); // this comment is basically to get help extract the
                                               // values more cleanly to make an entity
       
@@ -87,7 +86,7 @@ public class DataServlet extends HttpServlet {
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("content", comment.getContent());
         commentEntity.setProperty("timestamp", comment.getTimestamp());
-        commentEntity.setProperty("userId", userId);
+        commentEntity.setProperty("userId", comment.getUserId());
 
         datastore.put(commentEntity);
       }
@@ -97,7 +96,7 @@ public class DataServlet extends HttpServlet {
   // transforms the comments objects and the number of comments into JSON  
   private String convertToJsonUsingGson(ArrayList<Comment> comments, int numComments) {
       String userId = null;
-      if (userService.isUserLoggedIn()) {
+      if (userService.isUserLoggedIn())
           userId = userService.getCurrentUser().getUserId();
     Gson gson = new Gson();
 

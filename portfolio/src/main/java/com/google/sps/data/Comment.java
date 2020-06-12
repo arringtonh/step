@@ -50,6 +50,10 @@ public class Comment {
         return obj;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
     public boolean isSameUserId(String userId) {
         return this.userId.equals(userId);
     }
