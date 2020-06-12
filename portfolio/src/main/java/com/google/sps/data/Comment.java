@@ -9,21 +9,18 @@ import com.google.gson.JsonObject;
 public class Comment {
     private String name; // name of the commenter
     private String content; // content of the comment
-    private Date date; // date the comment was left
-    private String email;
+    private long timestamp; // date the comment was left
 
-    public Comment(String name, String content, String email) {
+    public Comment(String name, String content) {
         this.name = name;
         this.content = content;
-        this.date = new Date();
-        this.email = email;
+        this.timestamp = System.currentTimeMillis();
     }
 
-    public Comment(String name, String content, Date date, String email) {
+    public Comment(String name, String content, long timestamp) {
         this.name = name;
         this.content = content;
-        this.date = date;
-        this.email = email;
+        this.timestamp = timestamp;
     }
 
     public String getName() {
@@ -34,12 +31,8 @@ public class Comment {
         return content;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public String getEmail() {
-        return email;
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public JsonObject getJsonObject() {
@@ -47,8 +40,7 @@ public class Comment {
         JsonObject obj = new JsonObject();
         obj.addProperty("name", name);
         obj.addProperty("content", content);
-        obj.addProperty("date", date.toString());
-        obj.addProperty("email", email);
+        obj.addProperty("timestamp", timestamp);
         return obj;
     }
 }
