@@ -97,21 +97,11 @@ function addDeleteButton(heading, commentId) {
     const th = document.createElement("th");
     th.innerText = heading;
 
-    const form = document.createElement("form");
-    form.setAttribute("action", "/delete-data");
-    form.setAttribute("method", "POST");
-
-    const button = document.createElement("button");
-    button.setAttribute("type", "submit");
-    button.innerText = "delete comment";
-
-    const id = document.createElement("input");
-    id.name = "comment-id"
-    id.setAttribute("type", "hidden");
+    const template = document.getElementById("delete-template");
+    const form = template.content.cloneNode(true);
+    const id = form.querySelector("input");
     id.value = commentId;
 
-    form.appendChild(button);
-    form.appendChild(id);
     th.append(form);
     return th;
 }
