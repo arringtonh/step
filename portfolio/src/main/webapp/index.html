@@ -223,7 +223,13 @@
                 <option>50</option></select> comments.
           </form>
           <table id="comment-section">
-            </table>
+          </table>
+          <template id="delete-template">
+              <form action="/delete-data" method="POST" id="delete-form">
+              <input type="hidden" name="comment-id" />
+              <button type="submit">delete comment</button>
+              </form>
+          </template>
             <form id="pag-form" action="/data" method="POST">
             <div id="pag-div">
                 <button name="up" id="up" type="button" onclick="changeButtonValDown()">&laquo;</button>
@@ -241,7 +247,6 @@
                 <p>Add a comment:</p>
                 <input type="text" name="comment" id="comment" required>
                 <br/><br/>
-                <button type="button" onclick="deleteMessages()">delete all comments</button>
             <button type="submit">submit</button>
     </form>
         <a id="login-link"></a>

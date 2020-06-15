@@ -70,23 +70,41 @@ function addTextToDom(text) {
         const comment = parsedText.comments[i];
         const date = convertMillisToDate(comment.timestamp);
         const heading = ` (posted at ${date})`;
-        const row = makeComment(comment.name + heading, comment.content);
+        const row = makeComment(comment.name + heading, comment.content, comment.isOwnComment, comment.commentId);
         table.appendChild(row);
     }
 }
 
-function makeComment(heading, content) {
+function makeComment(heading, content, isOwnComment, commentId) {
     const row = document.createElement("tr")
-    const th = document.createElement("th");
-    const td = document.createElement("td");
 
-    th.innerText = heading;
+    var th = document.createElement("th");
+    if (isOwnComment) {
+        th = addDeleteButton(heading, commentId);
+    } else {
+        th.innerText = heading;
+    }
+    
+    const td = document.createElement("td");
     td.innerText = content;
 
     row.appendChild(th);
     row.appendChild(td)
 
     return row;
+}
+
+function addDeleteButton(heading, commentId) {
+    const th = document.createElement("th");
+    th.innerText = heading;
+
+    const template = document.getElementById("delete-template");
+    const form = template.content.cloneNode(true);
+    const id = form.querySelector("input");
+    id.value = commentId;
+
+    th.append(form);
+    return th;
 }
 
 function getDropdownVal() {
@@ -118,12 +136,7 @@ function handleDelete(response) {
 function deleteTextFromDom(text) {
     console.log("Deleting text from DOM: "+text);
     const table = document.getElementById("comment-section");
-
-    var i;
-    for (i = 0; i < table.children.length; i++) {
-        const comment = table.children[i];
-        comment.remove();
-    }
+    table.innerHTML = "";
 }
 
 function setCurrentPage() {
@@ -184,6 +197,7 @@ function submitUsername() {
 function convertMillisToDate(millis) {
     const date = new Date(parseInt(millis));
     return date.toLocaleString();
+}
 
 function createMap() {
     const snoopy = {

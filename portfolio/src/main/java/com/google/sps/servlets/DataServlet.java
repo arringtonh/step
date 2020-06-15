@@ -61,11 +61,13 @@ public class DataServlet extends HttpServlet {
     
       ArrayList<Comment> comments = new ArrayList<>();
       for (Entity entity : results.asList(options)) {
-          String name = getNickname(userService.getCurrentUser().getUserId());
           String content = (String) entity.getProperty("content");
           long timestamp = (long) entity.getProperty("timestamp");
+          String userId = (String) entity.getProperty("userId");
+          String name = (String) getNickname(userId);
+          long commentId = entity.getKey().getId();
 
-          Comment comment = new Comment(name, content, timestamp);
+          Comment comment = new Comment(name, content, timestamp, userId, commentId);
           comments.add(comment);
       }
 
@@ -77,13 +79,14 @@ public class DataServlet extends HttpServlet {
     // collects comment data from the form
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      Comment comment = makeComment(request);
-      
+      Comment comment = makeComment(request); // this comment is basically to get help extract the
+                                              // values more cleanly to make an entity
       
       if (comment != null) {
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("content", comment.getContent());
         commentEntity.setProperty("timestamp", comment.getTimestamp());
+        commentEntity.setProperty("userId", comment.getUserId());
 
         datastore.put(commentEntity);
       }
@@ -92,12 +95,18 @@ public class DataServlet extends HttpServlet {
 
   // transforms the comments objects and the number of comments into JSON  
   private String convertToJsonUsingGson(ArrayList<Comment> comments, int numComments) {
+      String userId = null;
+      if (userService.isUserLoggedIn())
+          userId = userService.getCurrentUser().getUserId();
     Gson gson = new Gson();
 
     JsonObject obj = new JsonObject();
     JsonArray jsonComments = new JsonArray();
     for (int i = 0; i < comments.size(); i++) {
-        jsonComments.add(comments.get(i).getJsonObject());
+        Comment current = comments.get(i);
+        JsonObject commentObj = current.getJsonObject();
+        commentObj.addProperty("isOwnComment", current.isSameUserId(userId));
+        jsonComments.add(commentObj);
     }
     obj.add("comments", jsonComments);
     obj.addProperty("numComments", numComments);
@@ -107,12 +116,13 @@ public class DataServlet extends HttpServlet {
 
   // creates a comment object from the form data
   private Comment makeComment(HttpServletRequest request) {
+      String userId = userService.getCurrentUser().getUserId();
       String name = getNickname(userService.getCurrentUser().getUserId());
       String comment = request.getParameter("comment");
       if (name == null && comment == null)
         return null;
       else
-        return new Comment(name, comment);
+        return new Comment(name, comment, userId);
   }
 
   // calculates the number of comments to send (which is just comments-to-show)
