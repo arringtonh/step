@@ -15,7 +15,9 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.ArrayList;
+import java.util.List;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
@@ -23,29 +25,32 @@ public final class FindMeetingQuery {
     if (request.getDuration() > minutesInOneDay)
         return new ArrayList<TimeRange>();
 
-    Collection<TimeRange> withOptional = new ArrayList<>();
-    Collection<TimeRange> mandatoryOnly = new ArrayList<>();
-    withOptional.add(TimeRange.WHOLE_DAY);
-    mandatoryOnly.add(TimeRange.WHOLE_DAY);
+    List<TimeRange> withOptional = new ArrayList<>();
+    List<TimeRange> mandatoryOnly = new ArrayList<>();
 
     Collection<String> allAttendees = new ArrayList<>();
     allAttendees.addAll(request.getAttendees());
-    allAttendees.addAll(request.getOptionalAttendees());
+    request.getOptionalAttendees();
+    if (request.getOptionalAttendees() != null)
+        allAttendees.addAll(request.getOptionalAttendees());
     for (Event event : events) {
         if (!areAttendeesAvailable(allAttendees, event))
         {
-            withOptional = availableTimes(withOptional, event, request.getDuration());
+            withOptional.add(event.getWhen());
         }
         if (!areAttendeesAvailable(request.getAttendees(), event))
         {
-            mandatoryOnly = availableTimes(mandatoryOnly, event, request.getDuration());
+            mandatoryOnly.add(event.getWhen());
         }
     }
 
-    if (request.getAttendees().isEmpty() || !withOptional.isEmpty())
-        return withOptional;
+    Collection<TimeRange> mandatory = updatedAvailableTimes(mandatoryOnly, request.getDuration());
+    Collection<TimeRange> optional = updatedAvailableTimes(withOptional, request.getDuration());
+
+    if (request.getAttendees().isEmpty() || !optional.isEmpty())
+        return optional;
     else {
-        return mandatoryOnly;
+        return mandatory;
     }
   }
 
@@ -59,6 +64,28 @@ public final class FindMeetingQuery {
       }
       return true;
   }
+
+    public Collection<TimeRange> updatedAvailableTimes(List<TimeRange> eventTimes, long requestDuration) {
+        TimeRange currentTimeRange = TimeRange.WHOLE_DAY;
+        Collection<TimeRange> availableTimes = new ArrayList<>();
+        Collections.sort(eventTimes, TimeRange.ORDER_BY_START);
+        for (TimeRange eventTime : eventTimes) {
+            if (currentTimeRange.overlaps(eventTime)) {
+                if (currentTimeRange.start() < eventTime.start() && eventTime.start() - currentTimeRange.start() >= requestDuration) // available time before event
+                {
+                    int duration = eventTime.start() - currentTimeRange.start();
+                    availableTimes.add(TimeRange.fromStartDuration(currentTimeRange.start(), duration));
+                }
+                if (eventTime.end() < currentTimeRange.end() && currentTimeRange.end() - eventTime.end() >= requestDuration) // available time after event
+                {
+                    int duration = currentTimeRange.end() - eventTime.end();
+                    currentTimeRange = TimeRange.fromStartDuration(eventTime.end(), duration);
+                }
+            }
+        }
+        availableTimes.add(currentTimeRange);
+        return availableTimes;
+    }
 
   /**
     given the time available for a meeting and an event,
